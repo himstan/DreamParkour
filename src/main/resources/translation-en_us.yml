@@ -1,0 +1,18 @@
+commands:
+  dreamparkour:
+    course-not-found: "&4Course not found with this name."
+    course-already-exists: "&4A course already exists with this name."
+    zero-arguments: "&4Not enough arguments! Use: <enable|disable|create|checkpoint|undo>"
+    one-argument: "&4Missing course name."
+    undo: "&6The last checkpoint has been removed."
+    no-checkpoints: "&4The course has no checkpoints."
+    disable: "&6You have disabled the course."
+    enable: "&6You have enabled the course."
+    create: "&6You have created the course."
+course:
+  set-start-checkpoint-location: "&6The checkpoint's starting location has been set!"
+  set-end-checkpoint-location: "&6The checkpoint's ending location has been set!"
+  checkpoint-created: "&6The checkpoint has been successfully created!"
+  not-present-anymore: "&4The course is not available anymore."
+  started-run: "&2Started a run"
+

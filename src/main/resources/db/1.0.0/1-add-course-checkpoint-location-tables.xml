@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.18.xsd"
+  objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+  <changeSet id="1671229630405-1" author="kriheg (generated)">
+    <createTable tableName="DbCheckpoint">
+      <column name="checkpoint_id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dbcheckpoint"/>
+      </column>
+      <column name="enabled" type="BOOLEAN"/>
+      <column name="start_location_id" type="VARCHAR(255)"/>
+      <column name="end_location_id" type="VARCHAR(255)"/>
+      <column name="course_course_id" type="UUID"/>
+      <column name="created_at" type="DATETIME"/>
+    </createTable>
+  </changeSet>
+  <changeSet id="1671229630405-2" author="kriheg (generated)">
+    <createTable tableName="DbCourse">
+      <column name="course_id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dbcourse"/>
+      </column>
+      <column name="course_name" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet id="1671229630405-3" author="kriheg (generated)">
+    <createTable tableName="DbLocation">
+      <column name="location_id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dblocation"/>
+      </column>
+      <column name="world_name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="x" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="y" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="z" type="DOUBLE">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="1671229630405-4" author="kriheg (generated)">
+    <addForeignKeyConstraint baseColumnNames="course_course_id" baseTableName="DbCheckpoint"
+      constraintName="FK_DBCHECKPOINT_ON_COURSE_COURSE" referencedColumnNames="course_id"
+      referencedTableName="DbCourse"/>
+  </changeSet>
+  <changeSet id="1671229630405-5" author="kriheg (generated)">
+    <addForeignKeyConstraint baseColumnNames="end_location_id" baseTableName="DbCheckpoint"
+      constraintName="FK_DBCHECKPOINT_ON_END_LOCATION" referencedColumnNames="location_id"
+      referencedTableName="DbLocation"/>
+  </changeSet>
+  <changeSet id="1671229630405-6" author="kriheg (generated)">
+    <addForeignKeyConstraint baseColumnNames="start_location_id" baseTableName="DbCheckpoint"
+      constraintName="FK_DBCHECKPOINT_ON_START_LOCATION" referencedColumnNames="location_id"
+      referencedTableName="DbLocation"/>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,15 @@
+name: DreamParkour
+version: '${project.version}'
+main: hu.stan.dreamparkour.DreamParkour
+api-version: 1.19
+depend: [ WorldGuard ]
+authors: [ StanHUN ]
+description: A simple parkour plugin
+
+commands:
+  dreamparkour:
+    aliases: dp
+    description: Command for managing the parkour courses
+    permission: parkour.dp
+    permission-message: You have no permission to use this command.
+    usage: "Usage: /dreamparkour"
