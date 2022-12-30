@@ -1,18 +1,33 @@
 commands:
   dreamparkour:
-    course-not-found: "&4Course not found with this name."
-    course-already-exists: "&4A course already exists with this name."
-    zero-arguments: "&4Not enough arguments! Use: <enable|disable|create|checkpoint|undo>"
-    one-argument: "&4Missing course name."
-    undo: "&6The last checkpoint has been removed."
-    no-checkpoints: "&4The course has no checkpoints."
-    disable: "&6You have disabled the course."
-    enable: "&6You have enabled the course."
-    create: "&6You have created the course."
+    create:
+      missing-course-name: "&4Please provide the course name as well."
+      already-exists: "&4A course already exists with this name."
+      success: "&3The course was successfully created!"
+    remove:
+      missing-course-name: "&4Please provide the course name as well."
+      course-doesnt-exist: "&4There is no course with this name. Maybe you meant to write %recommended_name%?"
+      success: "&3The course was successfully removed!"
+    enable:
+      missing-course-name: "&4Please provide the course name as well."
+      course-doesnt-exist: "&4There is no course with this name. Maybe you meant to write %recommended_name%?"
+      success: "&3The course was successfully enabled!"
+    disable:
+      missing-course-name: "&4Please provide the course name as well."
+      course-doesnt-exist: "&4There is no course with this name. Maybe you meant to write %recommended_name%?"
+      success: "&3The course was successfully disabled!"
+    checkpoint:
+      missing-course-name: "&4Please provide the course name as well."
+      course-doesnt-exist: "&4There is no course with this name. Maybe you meant to write %recommended_name%?"
+      success: "&3Left click on a block to set the checkpoint's region starter location.\nRight click on a block to set the checkpoint's region ending location."
+    undo:
+      missing-course-name: "&4Please provide the course name as well."
+      no-checkpoints: "&4This course has no checkpoints."
+      course-doesnt-exist: "&4There is no course with this name. Maybe you meant to write %recommended_name%?"
+      success: "&3The last checkpoint was deleted successfully!"
 course:
   set-start-checkpoint-location: "&6The checkpoint's starting location has been set!"
   set-end-checkpoint-location: "&6The checkpoint's ending location has been set!"
   checkpoint-created: "&6The checkpoint has been successfully created!"
   not-present-anymore: "&4The course is not available anymore."
-  started-run: "&2Started a run"
 

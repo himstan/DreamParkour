@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.entity.Player;
 
-public class EmptyRunTimeRespositoryImpl implements RunTimeRepository {
+public class EmptyRunTimeRepository implements RunTimeRepository {
 
   @Override
   public void save(final TotalRunTime totalRunTime) {

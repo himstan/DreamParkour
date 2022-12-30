@@ -6,7 +6,7 @@ import hu.stan.dreamparkour.model.Checkpoint;
 import hu.stan.dreamparkour.model.CheckpointLocation;
 import hu.stan.dreamparkour.model.Course;
 import hu.stan.dreamplugin.annotation.core.Service;
-import hu.stan.dreamplugin.core.translation.TranslationService;
+import hu.stan.dreamplugin.core.translation.Translate;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
@@ -40,7 +40,7 @@ public class CourseBuilderService {
     final var checkpoint = getCheckpoint(player);
     checkpoint.setStartLocation(new CheckpointLocation(location));
     saveCheckpoint(player, checkpoint);
-    player.sendRawMessage(TranslationService.translate("course.set-start-checkpoint-location"));
+    player.sendRawMessage(Translate.translateByDefaultLocale("course.set-start-checkpoint-location"));
     addCheckpointIfFinished(player, checkpoint);
   }
 
@@ -48,7 +48,7 @@ public class CourseBuilderService {
     final var checkpoint = getCheckpoint(player);
     checkpoint.setEndLocation(new CheckpointLocation(location));
     saveCheckpoint(player, checkpoint);
-    player.sendRawMessage(TranslationService.translate("course.set-end-checkpoint-location"));
+    player.sendRawMessage(Translate.translateByDefaultLocale("course.set-end-checkpoint-location"));
     addCheckpointIfFinished(player, checkpoint);
   }
 
@@ -76,9 +76,9 @@ public class CourseBuilderService {
             course.addCheckpoint(checkpoint);
             courseService.saveCourse(course);
             removeCheckpointFromBuilder(player);
-            player.sendRawMessage(TranslationService.translate("course.checkpoint-created"));
+            player.sendRawMessage(Translate.translateByDefaultLocale("course.checkpoint-created"));
           },
-          () -> player.sendRawMessage(TranslationService.translate("course.not-present-anymore"))
+          () -> player.sendRawMessage(Translate.translateByDefaultLocale("course.not-present-anymore"))
       );
     }
   }

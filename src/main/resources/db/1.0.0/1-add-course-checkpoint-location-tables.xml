@@ -47,17 +47,17 @@
   <changeSet id="1671229630405-4" author="kriheg (generated)">
     <addForeignKeyConstraint baseColumnNames="course_course_id" baseTableName="DbCheckpoint"
       constraintName="FK_DBCHECKPOINT_ON_COURSE_COURSE" referencedColumnNames="course_id"
-      referencedTableName="DbCourse"/>
+      referencedTableName="DbCourse" deleteCascade="true"/>
   </changeSet>
   <changeSet id="1671229630405-5" author="kriheg (generated)">
     <addForeignKeyConstraint baseColumnNames="end_location_id" baseTableName="DbCheckpoint"
       constraintName="FK_DBCHECKPOINT_ON_END_LOCATION" referencedColumnNames="location_id"
-      referencedTableName="DbLocation"/>
+      referencedTableName="DbLocation" deleteCascade="true"/>
   </changeSet>
   <changeSet id="1671229630405-6" author="kriheg (generated)">
     <addForeignKeyConstraint baseColumnNames="start_location_id" baseTableName="DbCheckpoint"
       constraintName="FK_DBCHECKPOINT_ON_START_LOCATION" referencedColumnNames="location_id"
-      referencedTableName="DbLocation"/>
+      referencedTableName="DbLocation" deleteCascade="true"/>
   </changeSet>
 
 </databaseChangeLog>

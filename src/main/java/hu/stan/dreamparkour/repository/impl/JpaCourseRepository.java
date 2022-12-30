@@ -11,12 +11,12 @@ import java.util.Optional;
 import java.util.UUID;
 import org.hibernate.SessionFactory;
 
-public class CourseRepositoryImpl implements CourseRepository {
+public class JpaCourseRepository implements CourseRepository {
 
   private final SessionFactory sessionFactory;
   private final CourseMapper courseMapper;
 
-  public CourseRepositoryImpl() {
+  public JpaCourseRepository() {
     this.courseMapper = DependencyInjector.getInstance().getInstanceOf(CourseMapper.class);
     this.sessionFactory = HibernateUtils.getInstance().getSessionFactory();
   }

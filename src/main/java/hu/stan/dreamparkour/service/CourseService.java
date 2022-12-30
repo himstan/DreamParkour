@@ -5,7 +5,8 @@ import hu.stan.dreamparkour.cache.course.CourseIdCache;
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
 import hu.stan.dreamparkour.model.Course;
 import hu.stan.dreamparkour.repository.CourseRepository;
-import hu.stan.dreamparkour.repository.impl.CourseRepositoryImpl;
+import hu.stan.dreamparkour.repository.impl.EmptyCourseRepository;
+import hu.stan.dreamparkour.repository.impl.JpaCourseRepository;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
@@ -31,15 +32,31 @@ public class CourseService {
     this.databaseConfiguration = databaseConfiguration;
     this.courseCache = courseCache;
     this.courseIdCache = courseIdCache;
-    this.courseRepository =
-        (CourseRepository) DependencyInjector.getInstance().initializeClass(CourseRepositoryImpl.class);
     if (databaseConfiguration.enabled) {
+    this.courseRepository =
+        (CourseRepository) DependencyInjector.getInstance().initializeClass(JpaCourseRepository.class);
       this.setupCourses();
+    } else {
+      this.courseRepository =
+          (CourseRepository) DependencyInjector.getInstance().initializeClass(EmptyCourseRepository.class);
     }
   }
 
   public Course createCourse(final String courseName) {
     return saveCourse(new Course(courseName));
+  }
+
+  public Course removeCourse(final String courseName) {
+    final var courseId = courseIdCache.get(courseName);
+    final var course = courseCache.get(courseId);
+    disableCourse(courseName);
+    courseIdCache.remove(courseName);
+    courseCache.remove(courseId);
+    if (databaseConfiguration.enabled) {
+      courseRepository.removeCourse(course);
+    }
+    log.info("Removing course! Id: [{}] Name: [{}]", course.getCourseId(), course.getCourseName());
+    return course;
   }
 
   public void enableCourse(final String courseName) {

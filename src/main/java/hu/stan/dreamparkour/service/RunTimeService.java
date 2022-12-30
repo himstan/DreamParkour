@@ -6,7 +6,7 @@ import hu.stan.dreamparkour.model.Course;
 import hu.stan.dreamparkour.model.CourseRun;
 import hu.stan.dreamparkour.model.TotalRunTime;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
-import hu.stan.dreamparkour.repository.impl.EmptyRunTimeRespositoryImpl;
+import hu.stan.dreamparkour.repository.impl.EmptyRunTimeRepository;
 import hu.stan.dreamparkour.repository.impl.RunTimeRepositoryImpl;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
@@ -33,7 +33,7 @@ public class RunTimeService {
     if (configuration.enabled) {
       runTimeRepository = new RunTimeRepositoryImpl();
     } else {
-      runTimeRepository = new EmptyRunTimeRespositoryImpl();
+      runTimeRepository = new EmptyRunTimeRepository();
     }
     initBestTimes();
   }

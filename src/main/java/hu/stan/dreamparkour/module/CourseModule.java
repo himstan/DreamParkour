@@ -1,5 +1,6 @@
 package hu.stan.dreamparkour.module;
 
+import static hu.stan.dreamparkour.common.constant.PluginConstants.SHORT_TIME_FORMAT;
 import static hu.stan.dreamparkour.common.constant.PluginConstants.TIME_FORMAT;
 import static hu.stan.dreamparkour.util.CourseRunUtils.calculateRunTime;
 
@@ -11,9 +12,9 @@ import hu.stan.dreamparkour.model.Course;
 import hu.stan.dreamparkour.model.CourseRun;
 import hu.stan.dreamparkour.service.BestTimeService;
 import hu.stan.dreamparkour.service.CourseRunService;
+import hu.stan.dreamparkour.service.RunTimeDisplayService;
 import hu.stan.dreamparkour.service.RunTimeService;
 import hu.stan.dreamplugin.annotation.core.Module;
-import hu.stan.dreamplugin.core.translation.TranslationService;
 import java.time.LocalTime;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -33,6 +34,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 @RequiredArgsConstructor
 public class CourseModule implements Listener {
 
+  private final RunTimeDisplayService runTimeDisplayService;
   private final CourseHelper courseHelper;
   private final BestTimeService bestTimeService;
   private final RunTimeService runTimeService;
@@ -60,6 +62,7 @@ public class CourseModule implements Listener {
         return;
       }
       checkpoint = courseRunService.startCourseRun(player, optCourse.get()).getCurrentCheckpoint().getCheckpoint();
+      runTimeDisplayService.startTrackDisplayForPlayer(player);
     } else {
       checkpoint = courseRunService.getCourseRun(player).getCurrentCheckpoint().getCheckpoint();
     }
@@ -97,11 +100,10 @@ public class CourseModule implements Listener {
 
   private void handleLastCheckpoint(final Player player, final CourseRun courseRun) {
     final var runTime = courseRunService.stopRunTimer(player);
-    final var course = courseRun.getCourse();
+    runTimeDisplayService.displayTotalTimeToPlayer(player, runTime);
     log.info("Player [{}] has finished a run! Time: [{}]",
         player.getName(), runTime);
     runTimeService.recordRunTime(player, courseRun, runTime);
-    player.sendRawMessage("Finished course in: " + runTime.format(TIME_FORMAT));
   }
 
   private void handleFirstCheckpoint(
@@ -109,7 +111,6 @@ public class CourseModule implements Listener {
       final CheckpointNode bestCheckpoint) {
     if (currentCheckpoint.isFirstCheckpoint()) {
       log.info("Player: [{}] started a run at: [{}]", player.getName(), courseRun.getCourse().getCourseName());
-      player.sendRawMessage(TranslationService.translate("course.started-run"));
     } else {
       notifyPlayerAboutSplitTime(player, courseRun.getCourse(), currentCheckpoint, bestCheckpoint);
     }
@@ -122,12 +123,19 @@ public class CourseModule implements Listener {
       final CheckpointNode bestRun) {
     final var currentTime = currentRun.getLastCheckpointTime();
     final var bestRunTime = bestRun.getLastCheckpointTime();
+    final var currentTimeFormatted = getFormattedTime(currentTime);
     if (Objects.nonNull(bestRunTime) && bestTimeService.hasBestRunSplitTimes(player, course)) {
       final var difference = calculateRunTime(bestRunTime, currentTime);
-      player.sendRawMessage(
-          getChatColor(currentTime, bestRunTime) + difference.format(TIME_FORMAT));
+      final var differenceFormatted =
+          getSplitTimePrefix(currentTime, bestRunTime) + difference.format(SHORT_TIME_FORMAT);
+      player.sendRawMessage(String.format("%s (%s%s)", currentTimeFormatted, differenceFormatted, ChatColor.WHITE));
+    } else {
+      player.sendRawMessage(currentTimeFormatted);
     }
-    player.sendRawMessage(currentTime.format(TIME_FORMAT));
+  }
+
+  private String getFormattedTime(final LocalTime localTime) {
+    return localTime.format(TIME_FORMAT);
   }
 
   private boolean hasNotMovedFullBlock(final Location from, @Nullable final Location to) {
@@ -137,7 +145,7 @@ public class CourseModule implements Listener {
         && from.getBlockZ() == to.getBlockZ());
   }
 
-  private ChatColor getChatColor(final LocalTime currentTime, final LocalTime bestTime) {
-    return currentTime.isBefore(bestTime) ? ChatColor.GREEN : ChatColor.RED;
+  private String getSplitTimePrefix(final LocalTime currentTime, final LocalTime bestTime) {
+    return currentTime.isBefore(bestTime) ? ChatColor.GREEN + "-" : ChatColor.RED + "+";
   }
 }
