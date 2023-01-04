@@ -8,6 +8,9 @@ public final class CourseRunUtils {
   private CourseRunUtils() {}
 
   public static CheckpointNode rewindCheckpointToStart(final CheckpointNode checkpointNode) {
+    if (checkpointNode.isFirstCheckpoint()) {
+      return checkpointNode;
+    }
     var checkpoint = checkpointNode;
     while (!checkpoint.isFirstCheckpoint()) {
       checkpoint = checkpoint.getLastCheckpoint();

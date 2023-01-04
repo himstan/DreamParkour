@@ -61,7 +61,8 @@ public class RunTimeRepositoryImpl implements RunTimeRepository {
               + "WHERE totalRun = (SELECT dtrt FROM DbTotalRunTime dtrt "
               + "WHERE course.courseId = :courseId "
               + "AND dtrt.playerId = :playerId "
-              + "AND runTime = (SELECT MIN(runTime) FROM DbTotalRunTime dtrt2 WHERE playerId = dtrt.playerId)"
+              + "AND runTime = (SELECT MIN(runTime) FROM DbTotalRunTime dtrt2 WHERE playerId = dtrt.playerId "
+              + "AND dtrt2.course = dtrt.course)"
               + "GROUP BY playerId) "
               + "ORDER BY splitTime ASC"
           , DbSplitRunTime.class);

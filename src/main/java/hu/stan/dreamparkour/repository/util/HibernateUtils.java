@@ -61,7 +61,7 @@ public final class HibernateUtils {
         new ClassLoaderResourceAccessor(), database)) {
       liquibase.update(new Contexts());
     } catch (final ClassCastException ignored) {
-      // There is a liquibase bug which we just ignore because it doesn't really effect anything.
+      // There is a liquibase bug which we just ignore because it doesn't really affect anything.
     }
   }
 

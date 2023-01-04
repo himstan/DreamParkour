@@ -34,7 +34,7 @@ public class BestTimeService {
   }
 
   public boolean hasBestRunSplitTimes(final Player player, final Course course) {
-    return bestRunSplitCache.hasRunForCourse(player, course);
+     return bestRunSplitCache.hasRunForCourse(player, course);
   }
 
   public LocalTime getBestRunTotalTime(final Player player, final Course course) {

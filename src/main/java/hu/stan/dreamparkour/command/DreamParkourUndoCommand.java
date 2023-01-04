@@ -1,9 +1,10 @@
 package hu.stan.dreamparkour.command;
 
+import hu.stan.dreamparkour.exception.CourseNotFoundException;
 import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.service.CourseBuilderService;
 import hu.stan.dreamparkour.service.CourseService;
 import hu.stan.dreamplugin.annotation.command.Command;
+import hu.stan.dreamplugin.annotation.command.ErrorHandler;
 import hu.stan.dreamplugin.common.helper.StringHelper;
 import hu.stan.dreamplugin.core.command.DreamCommandExecutor;
 import hu.stan.dreamplugin.core.command.DreamTabCompleter;
@@ -22,7 +23,6 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 public class DreamParkourUndoCommand implements DreamCommandExecutor, DreamTabCompleter {
 
-  private final CourseBuilderService courseBuilderService;
   private final CourseService courseService;
 
   @Override
@@ -33,7 +33,7 @@ public class DreamParkourUndoCommand implements DreamCommandExecutor, DreamTabCo
       return;
     }
     final var courseName = args[0];
-    courseService.findCourseBy(courseName).ifPresentOrElse(
+    courseService.findCourseBy(courseName).ifPresent(
         course -> {
           if (course.getCheckpoints().isEmpty()) {
             player.sendRawMessage(
@@ -44,10 +44,7 @@ public class DreamParkourUndoCommand implements DreamCommandExecutor, DreamTabCo
             player.sendRawMessage(
                 Translate.translateByDefaultLocale("commands.dreamparkour.undo.success"));
           }
-        },
-        () -> player.sendRawMessage(
-            Translate.translateByDefaultLocale("commands.dreamparkour.undo.course-doesnt-exist",
-                "recommended_name", StringHelper.findClosestString(getCourseNamesInArray(), courseName)))
+        }
     );
   }
 
@@ -58,6 +55,14 @@ public class DreamParkourUndoCommand implements DreamCommandExecutor, DreamTabCo
     } else {
       return Collections.emptyList();
     }
+  }
+
+  @ErrorHandler(exception = CourseNotFoundException.class)
+  public void handleCourseNotFound(final Player player, final CourseNotFoundException exception) {
+    final var courseName = exception.getCourseName();
+    player.sendRawMessage(Translate.translateByDefaultLocale(
+        "commands.dreamparkour.undo.course-doesnt-exist",
+        "recommended_name", StringHelper.findClosestString(getCourseNamesInArray(), courseName)));
   }
 
   private String[] getCourseNamesInArray() {

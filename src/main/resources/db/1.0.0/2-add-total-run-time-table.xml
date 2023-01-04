@@ -18,7 +18,7 @@
   <changeSet id="1671229630476-2" author="kriheg (generated)">
     <addForeignKeyConstraint baseColumnNames="course_course_id" baseTableName="DbTotalRunTime"
       constraintName="FK_DBTOTALRUNTIME_ON_COURSE_COURSE" referencedColumnNames="course_id"
-      referencedTableName="DbCourse" deleteCascade="true"/>
+      referencedTableName="DbCourse" onDelete="CASCADE"/>
   </changeSet>
 
 </databaseChangeLog>

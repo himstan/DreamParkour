@@ -1,5 +1,7 @@
 commands:
   dreamparkour:
+    reload:
+      success: "&3The plugin was reloaded successfully!"
     create:
       missing-course-name: "&4Please provide the course name as well."
       already-exists: "&4A course already exists with this name."

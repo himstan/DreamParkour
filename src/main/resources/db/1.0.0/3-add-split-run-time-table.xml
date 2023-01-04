@@ -19,10 +19,10 @@
   <changeSet id="167122963047453-2" author="kriheg (generated)">
     <addForeignKeyConstraint baseColumnNames="checkpoint_checkpoint_id" baseTableName="DbSplitRunTime"
       constraintName="FK_DBSPLITTIME_ON_CHECKPOINT_ID" referencedColumnNames="checkpoint_id"
-      referencedTableName="DbCheckpoint" deleteCascade="true"/>
+      referencedTableName="DbCheckpoint" onDelete="CASCADE"/>
     <addForeignKeyConstraint baseColumnNames="totalRun_run_id" baseTableName="DbSplitRunTime"
       constraintName="FK_DBSPLITTIME_ON_TOTALRUN_ID" referencedColumnNames="run_id"
-      referencedTableName="DbTotalRunTime" deleteCascade="true"/>
+      referencedTableName="DbTotalRunTime" onDelete="CASCADE"/>
   </changeSet>
 
 </databaseChangeLog>

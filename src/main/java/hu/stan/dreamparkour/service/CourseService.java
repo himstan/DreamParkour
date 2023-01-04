@@ -3,6 +3,8 @@ package hu.stan.dreamparkour.service;
 import hu.stan.dreamparkour.cache.course.CourseCache;
 import hu.stan.dreamparkour.cache.course.CourseIdCache;
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
+import hu.stan.dreamparkour.exception.CourseAlreadyExistsException;
+import hu.stan.dreamparkour.exception.CourseNotFoundException;
 import hu.stan.dreamparkour.model.Course;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.impl.EmptyCourseRepository;
@@ -10,7 +12,6 @@ import hu.stan.dreamparkour.repository.impl.JpaCourseRepository;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
-import hu.stan.dreamplugin.exception.DreamPluginException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,14 +44,22 @@ public class CourseService {
   }
 
   public Course createCourse(final String courseName) {
-    return saveCourse(new Course(courseName));
+    final var loweredName = courseName.toLowerCase();
+    if (courseIdCache.exists(loweredName)) {
+      throw new CourseAlreadyExistsException(courseName);
+    }
+    return saveCourse(new Course(loweredName));
   }
 
   public Course removeCourse(final String courseName) {
-    final var courseId = courseIdCache.get(courseName);
+    final var loweredName = courseName.toLowerCase();
+    if (!courseIdCache.exists(loweredName)) {
+      throw new CourseNotFoundException(courseName);
+    }
+    final var courseId = courseIdCache.get(loweredName);
     final var course = courseCache.get(courseId);
-    disableCourse(courseName);
-    courseIdCache.remove(courseName);
+    disableCourse(loweredName);
+    courseIdCache.remove(loweredName);
     courseCache.remove(courseId);
     if (databaseConfiguration.enabled) {
       courseRepository.removeCourse(course);
@@ -96,9 +105,9 @@ public class CourseService {
   }
 
   public Optional<Course> findCourseBy(final String courseName) {
-    final var courseId = Optional.ofNullable(courseIdCache.get(courseName));
+    final var courseId = Optional.ofNullable(courseIdCache.get(courseName.toLowerCase()));
     return findCourseBy(courseId.orElseThrow(
-        () -> new DreamPluginException("No course with the name: " + courseName)));
+        () -> new CourseNotFoundException(courseName)));
   }
 
   public List<Course> findAll() {
@@ -110,7 +119,7 @@ public class CourseService {
   }
 
   public boolean hasCourse(final String courseName) {
-    return courseIdCache.exists(courseName);
+    return courseIdCache.exists(courseName.toLowerCase());
   }
 
   private void persistCourse(final Course course) {
