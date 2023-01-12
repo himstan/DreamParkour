@@ -1,5 +1,6 @@
-package hu.stan.dreamparkour.model;
+package hu.stan.dreamparkour.model.course;
 
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

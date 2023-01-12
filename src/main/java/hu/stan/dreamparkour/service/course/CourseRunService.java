@@ -1,11 +1,11 @@
-package hu.stan.dreamparkour.service;
+package hu.stan.dreamparkour.service.course;
 
 import hu.stan.dreamparkour.cache.course.CourseRunCache;
 import hu.stan.dreamparkour.cache.time.StartTimeCache;
 import hu.stan.dreamparkour.common.helper.CourseRunHelper;
 import hu.stan.dreamparkour.exception.RunTimeNotStartedException;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.model.CourseRun;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.model.course.CourseRun;
 import hu.stan.dreamparkour.util.CourseRunUtils;
 import hu.stan.dreamplugin.annotation.core.Service;
 import java.time.LocalTime;

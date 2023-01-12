@@ -1,5 +1,6 @@
-package hu.stan.dreamparkour.model;
+package hu.stan.dreamparkour.model.course;
 
+import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

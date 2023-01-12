@@ -1,4 +1,4 @@
-package hu.stan.dreamparkour.model;
+package hu.stan.dreamparkour.model.checkpoint;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;

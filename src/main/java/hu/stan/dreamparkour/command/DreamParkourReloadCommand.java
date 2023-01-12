@@ -21,6 +21,6 @@ public class DreamParkourReloadCommand implements DreamCommandExecutor {
     final var pluginInstance = DreamPlugin.getInstance();
     pluginInstance.onDisable();
     pluginInstance.onEnable();
-    player.sendRawMessage(Translate.translateByDefaultLocale("commands.dreamparkour.reload.success"));
+    Translate.sendTo(player,"commands.dreamparkour.reload.success");
   }
 }

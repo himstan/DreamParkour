@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.mapper;
 
-import hu.stan.dreamparkour.model.Checkpoint;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.entity.DbCheckpoint;
 import hu.stan.dreamplugin.annotation.core.Component;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package hu.stan.dreamparkour.service;
+package hu.stan.dreamparkour.service.scoreboard;
 
 import fr.mrmicky.fastboard.FastBoard;
 import hu.stan.dreamparkour.cache.scoreboard.ScoreboardCache;

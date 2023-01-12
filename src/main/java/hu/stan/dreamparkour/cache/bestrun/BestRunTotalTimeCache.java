@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.cache.bestrun;
 
-import hu.stan.dreamparkour.model.Course;
+import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamplugin.core.cache.BaseCache;
 import java.time.LocalTime;
 import java.util.UUID;

@@ -1,13 +1,14 @@
-package hu.stan.dreamparkour.service;
+package hu.stan.dreamparkour.service.runtime;
 
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
-import hu.stan.dreamparkour.model.CheckpointNode;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.model.CourseRun;
 import hu.stan.dreamparkour.model.TotalRunTime;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.model.course.CourseRun;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.impl.EmptyRunTimeRepository;
 import hu.stan.dreamparkour.repository.impl.RunTimeRepositoryImpl;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
 import java.time.LocalTime;

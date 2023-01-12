@@ -1,8 +1,8 @@
 package hu.stan.dreamparkour.repository;
 
-import hu.stan.dreamparkour.model.CheckpointNode;
-import hu.stan.dreamparkour.model.Course;
 import hu.stan.dreamparkour.model.TotalRunTime;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
+import hu.stan.dreamparkour.model.course.Course;
 import java.util.List;
 import org.bukkit.entity.Player;
 

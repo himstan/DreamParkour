@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.event;
 
-import hu.stan.dreamparkour.model.CourseRun;
+import hu.stan.dreamparkour.model.course.CourseRun;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;

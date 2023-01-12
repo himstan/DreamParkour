@@ -1,7 +1,7 @@
 package hu.stan.dreamparkour.command;
 
 import hu.stan.dreamparkour.exception.CourseAlreadyExistsException;
-import hu.stan.dreamparkour.service.CourseService;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.annotation.command.Command;
 import hu.stan.dreamplugin.annotation.command.ErrorHandler;
 import hu.stan.dreamplugin.core.command.DreamCommandExecutor;
@@ -23,19 +23,16 @@ public class DreamParkourCreateCommand implements DreamCommandExecutor {
   @Override
   public void onCommand(final Player player, final String[] args) {
     if (args.length == 0) {
-      player.sendRawMessage(Translate.translateByDefaultLocale(
-          "commands.dreamparkour.create.missing-course-name"));
+      Translate.sendTo(player, "commands.dreamparkour.create.missing-course-name");
       return;
     }
     final var courseName = args[0];
     courseService.createCourse(courseName);
-    player.sendRawMessage(Translate.translateByDefaultLocale(
-        "commands.dreamparkour.create.success"));
+    Translate.sendTo(player, "commands.dreamparkour.create.success");
   }
 
   @ErrorHandler(exception = CourseAlreadyExistsException.class)
   public void handleCourseAlreadyExists(final Player player) {
-    player.sendRawMessage(Translate.translateByDefaultLocale(
-        "commands.dreamparkour.create.already-exists"));
+    Translate.sendTo(player, "commands.dreamparkour.create.already-exists");
   }
 }

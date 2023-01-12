@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.repository;
 
-import hu.stan.dreamparkour.model.Course;
+import hu.stan.dreamparkour.model.course.Course;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

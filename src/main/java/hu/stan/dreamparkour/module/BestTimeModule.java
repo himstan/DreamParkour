@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.module;
 
-import hu.stan.dreamparkour.service.RunTimeService;
+import hu.stan.dreamparkour.service.runtime.RunTimeService;
 import hu.stan.dreamplugin.annotation.core.Module;
 import lombok.AllArgsConstructor;
 import org.bukkit.event.EventHandler;

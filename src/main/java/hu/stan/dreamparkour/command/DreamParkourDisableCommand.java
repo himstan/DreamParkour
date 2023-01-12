@@ -1,8 +1,8 @@
 package hu.stan.dreamparkour.command;
 
 import hu.stan.dreamparkour.exception.CourseNotFoundException;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.service.CourseService;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.annotation.command.Command;
 import hu.stan.dreamplugin.annotation.command.ErrorHandler;
 import hu.stan.dreamplugin.common.helper.StringHelper;
@@ -28,14 +28,12 @@ public class DreamParkourDisableCommand implements DreamCommandExecutor, DreamTa
   @Override
   public void onCommand(final Player player, final String[] args) {
     if (args.length == 0) {
-      player.sendRawMessage(Translate.translateByDefaultLocale(
-          "commands.dreamparkour.disable.missing-course-name"));
+      Translate.sendTo(player, "commands.dreamparkour.disable.missing-course-name");
       return;
     }
     final var courseName = args[0];
     courseService.disableCourse(courseName);
-    player.sendRawMessage(Translate.translateByDefaultLocale(
-        "commands.dreamparkour.disable.success"));
+    Translate.sendTo(player, "commands.dreamparkour.disable.success");
   }
 
   @Override
@@ -50,9 +48,8 @@ public class DreamParkourDisableCommand implements DreamCommandExecutor, DreamTa
   @ErrorHandler(exception = CourseNotFoundException.class)
   public void handleCourseNotFound(final Player player, final CourseNotFoundException exception) {
     final var courseName = exception.getCourseName();
-    player.sendRawMessage(Translate.translateByDefaultLocale(
-        "commands.dreamparkour.disable.course-doesnt-exist",
-        "recommended_name", StringHelper.findClosestString(getCourseNamesInArray(), courseName)));
+    Translate.sendTo(player, "commands.dreamparkour.disable.course-doesnt-exist",
+        "recommended_name", StringHelper.findClosestString(getCourseNamesInArray(), courseName));
   }
 
   private List<String> getCourseNames() {

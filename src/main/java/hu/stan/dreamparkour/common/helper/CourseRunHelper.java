@@ -1,10 +1,10 @@
 package hu.stan.dreamparkour.common.helper;
 
-import hu.stan.dreamparkour.model.Checkpoint;
-import hu.stan.dreamparkour.model.CheckpointNode;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.model.CourseRun;
-import hu.stan.dreamparkour.service.BestTimeService;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.model.course.CourseRun;
+import hu.stan.dreamparkour.service.runtime.BestTimeService;
 import hu.stan.dreamplugin.annotation.core.Component;
 import java.util.List;
 import java.util.UUID;
@@ -17,12 +17,28 @@ public class CourseRunHelper {
 
   private final BestTimeService bestTimeService;
 
+  /**
+   * Builds a course run for the player on the given course.
+   *
+   * @param player The player we want to build a run for.
+   * @param course The course we are building a run for.
+   *
+   * @return The built run which is containing the checkpoint nodes for the player's run.
+   */
   public CourseRun buildCourseRun(final Player player, final Course course) {
     final var currentRun = buildNewCheckpointNodes(course, player);
     final var bestRun = getBestTime(player, course, currentRun);
     return new CourseRun(course, player, currentRun, bestRun);
   }
 
+  /**
+   * Connects the given checkpoints into a checkpoint node object.
+   *
+   * @param checkpoints The checkpoint list we want to connect together with nodes.
+   * @param player      The player that the checkpoint nodes are assigned to.
+   *
+   * @return The checkpoint node that has the player's data and all the checkpoints connected in order.
+   */
   public CheckpointNode buildNewCheckpointNodes(final List<Checkpoint> checkpoints, final Player player) {
     final var checkpointNodes = mapToCheckpointNode(checkpoints, player);
     connectCheckpointNodes(checkpointNodes);

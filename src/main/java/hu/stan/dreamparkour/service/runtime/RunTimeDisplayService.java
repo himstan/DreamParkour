@@ -1,4 +1,4 @@
-package hu.stan.dreamparkour.service;
+package hu.stan.dreamparkour.service.runtime;
 
 import static hu.stan.dreamparkour.common.constant.PluginConstants.TIME_FORMAT;
 

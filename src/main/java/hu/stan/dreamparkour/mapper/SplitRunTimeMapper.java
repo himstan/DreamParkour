@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.mapper;
 
-import hu.stan.dreamparkour.model.CheckpointNode;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.entity.DbSplitRunTime;
 import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
 import hu.stan.dreamparkour.util.CourseRunUtils;

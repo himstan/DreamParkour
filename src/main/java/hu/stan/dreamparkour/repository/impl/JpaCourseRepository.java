@@ -1,7 +1,7 @@
 package hu.stan.dreamparkour.repository.impl;
 
 import hu.stan.dreamparkour.mapper.CourseMapper;
-import hu.stan.dreamparkour.model.Course;
+import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.entity.DbCourse;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.util.HibernateUtils;

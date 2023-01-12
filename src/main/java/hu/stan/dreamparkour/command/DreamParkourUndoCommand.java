@@ -1,8 +1,8 @@
 package hu.stan.dreamparkour.command;
 
 import hu.stan.dreamparkour.exception.CourseNotFoundException;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.service.CourseService;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.annotation.command.Command;
 import hu.stan.dreamplugin.annotation.command.ErrorHandler;
 import hu.stan.dreamplugin.common.helper.StringHelper;
@@ -28,21 +28,18 @@ public class DreamParkourUndoCommand implements DreamCommandExecutor, DreamTabCo
   @Override
   public void onCommand(final Player player, final String[] args) {
     if (args.length == 0) {
-      player.sendRawMessage(Translate.translateByDefaultLocale(
-          "commands.dreamparkour.undo.missing-course-name"));
+      Translate.sendTo(player, "commands.dreamparkour.undo.missing-course-name");
       return;
     }
     final var courseName = args[0];
     courseService.findCourseBy(courseName).ifPresent(
         course -> {
           if (course.getCheckpoints().isEmpty()) {
-            player.sendRawMessage(
-                Translate.translateByDefaultLocale("commands.dreamparkour.undo.no-checkpoints"));
+            Translate.sendTo(player, "commands.dreamparkour.undo.no-checkpoints");
           } else {
             course.removeLastCheckpoint();
             courseService.saveCourse(course);
-            player.sendRawMessage(
-                Translate.translateByDefaultLocale("commands.dreamparkour.undo.success"));
+            Translate.sendTo(player, "commands.dreamparkour.undo.success");
           }
         }
     );
@@ -60,9 +57,8 @@ public class DreamParkourUndoCommand implements DreamCommandExecutor, DreamTabCo
   @ErrorHandler(exception = CourseNotFoundException.class)
   public void handleCourseNotFound(final Player player, final CourseNotFoundException exception) {
     final var courseName = exception.getCourseName();
-    player.sendRawMessage(Translate.translateByDefaultLocale(
-        "commands.dreamparkour.undo.course-doesnt-exist",
-        "recommended_name", StringHelper.findClosestString(getCourseNamesInArray(), courseName)));
+    Translate.sendTo(player, "commands.dreamparkour.undo.course-doesnt-exist",
+        "recommended_name", StringHelper.findClosestString(getCourseNamesInArray(), courseName));
   }
 
   private String[] getCourseNamesInArray() {

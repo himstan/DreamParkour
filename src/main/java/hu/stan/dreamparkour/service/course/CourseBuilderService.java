@@ -1,10 +1,10 @@
-package hu.stan.dreamparkour.service;
+package hu.stan.dreamparkour.service.course;
 
 import hu.stan.dreamparkour.cache.course.CheckpointBuilderCache;
 import hu.stan.dreamparkour.cache.course.CourseBuilderCache;
-import hu.stan.dreamparkour.model.Checkpoint;
-import hu.stan.dreamparkour.model.CheckpointLocation;
-import hu.stan.dreamparkour.model.Course;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointLocation;
+import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamplugin.annotation.core.Service;
 import hu.stan.dreamplugin.core.translation.Translate;
 import java.util.Objects;
@@ -40,7 +40,7 @@ public class CourseBuilderService {
     final var checkpoint = getCheckpoint(player);
     checkpoint.setStartLocation(new CheckpointLocation(location));
     saveCheckpoint(player, checkpoint);
-    player.sendRawMessage(Translate.translateByDefaultLocale("course.set-start-checkpoint-location"));
+    Translate.sendTo(player,"course.set-start-checkpoint-location");
     addCheckpointIfFinished(player, checkpoint);
   }
 
@@ -48,7 +48,7 @@ public class CourseBuilderService {
     final var checkpoint = getCheckpoint(player);
     checkpoint.setEndLocation(new CheckpointLocation(location));
     saveCheckpoint(player, checkpoint);
-    player.sendRawMessage(Translate.translateByDefaultLocale("course.set-end-checkpoint-location"));
+    Translate.sendTo(player,"course.set-end-checkpoint-location");
     addCheckpointIfFinished(player, checkpoint);
   }
 
@@ -76,9 +76,9 @@ public class CourseBuilderService {
             course.addCheckpoint(checkpoint);
             courseService.saveCourse(course);
             removeCheckpointFromBuilder(player);
-            player.sendRawMessage(Translate.translateByDefaultLocale("course.checkpoint-created"));
+            Translate.sendTo(player,"course.checkpoint-created");
           },
-          () -> player.sendRawMessage(Translate.translateByDefaultLocale("course.not-present-anymore"))
+          () -> Translate.sendTo(player,"course.not-present-anymore")
       );
     }
   }

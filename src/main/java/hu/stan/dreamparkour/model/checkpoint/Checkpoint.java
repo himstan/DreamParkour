@@ -1,4 +1,4 @@
-package hu.stan.dreamparkour.model;
+package hu.stan.dreamparkour.model.checkpoint;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

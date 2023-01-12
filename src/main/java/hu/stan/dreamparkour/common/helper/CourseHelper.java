@@ -1,8 +1,8 @@
 package hu.stan.dreamparkour.common.helper;
 
-import hu.stan.dreamparkour.model.Checkpoint;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.service.CourseService;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.annotation.core.Component;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +27,20 @@ public class CourseHelper {
         .findFirst();
   }
 
+  /**
+   * Checks if the player is inside the given checkpoint.
+   *
+   * @param player     The player we are checking.
+   * @param checkpoint The checkpoint we are checking.
+   *
+   * @return true, if the player is inside the checkpoint, false otherwise.
+   */
   public boolean isPlayerInCheckpoint(final Player player, final Checkpoint checkpoint) {
     final var playerLocation = player.getLocation();
     final var startLocation = checkpoint.getStartLocation().getLocation();
     final var endLocation = checkpoint.getEndLocation().getLocation();
     final double distanceToStart = Math.floor(playerLocation.distanceSquared(startLocation));
-    final double distanceToEnd = Math.floor(playerLocation.distanceSquared(endLocation));
+    final double distanceToEnd = Math.ceil(playerLocation.distanceSquared(endLocation));
     final double regionDistance = Math.floor(startLocation.distanceSquared(endLocation));
     return distanceToStart + distanceToEnd <= regionDistance;
   }

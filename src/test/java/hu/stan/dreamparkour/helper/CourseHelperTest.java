@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 
 import hu.stan.dreamparkour.BaseUnitTest;
 import hu.stan.dreamparkour.common.helper.CourseHelper;
-import hu.stan.dreamparkour.model.Checkpoint;
-import hu.stan.dreamparkour.model.CheckpointLocation;
-import hu.stan.dreamparkour.service.CourseService;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointLocation;
+import hu.stan.dreamparkour.service.course.CourseService;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.bukkit.Location;

@@ -1,0 +1,65 @@
+package hu.stan.dreamparkour.hooks.papi.extension;
+
+import hu.stan.dreamparkour.service.course.CourseService;
+import hu.stan.dreamparkour.service.toprunners.TopRunnersService;
+import java.util.Arrays;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.OfflinePlayer;
+
+@RequiredArgsConstructor
+public class TopRunnersExtension extends PlaceholderExpansion {
+
+  private final CourseService courseService;
+  private final TopRunnersService topRunnersService;
+
+  @Override
+  public String getIdentifier() {
+    return "top_run";
+  }
+
+  @Override
+  public String getAuthor() {
+    return "StanHUN";
+  }
+
+  @Override
+  public String getVersion() {
+    return "1.0.0";
+  }
+
+  @Override
+  public boolean persist() {
+    return true;
+  }
+
+  @Override
+  public String onRequest(final OfflinePlayer p, final String identifier) {
+    final var args = getArguments(identifier);
+    if (args.size() < 3) {
+      return "Not enough arguments were passed to the placeholder!";
+    }
+    final var courseName = args.get(0);
+    if (!courseService.hasCourse(courseName)) {
+      return "Couldn't find course with name: " + courseName;
+    }
+    final var courseId = courseService.getIdForCourse(courseName);
+    final var place = Integer.parseInt(args.get(1));
+    final var displayType = args.get(2);
+    final var runData = topRunnersService.getRunForCourseAtPlace(courseId, place);
+    return isDisplayTypeName(displayType)
+        ? runData.playerName()
+        : runData.formattedRunTime();
+  }
+
+  private boolean isDisplayTypeName(final String displayType) {
+    return displayType.equalsIgnoreCase("name");
+  }
+
+  private List<String> getArguments(final String identifier) {
+    var parts = identifier.split(":");
+    parts = Arrays.copyOfRange(parts, 1, parts.length);
+    return Arrays.asList(parts);
+  }
+}

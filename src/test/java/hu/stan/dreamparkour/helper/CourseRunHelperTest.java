@@ -7,10 +7,10 @@ import static org.mockito.Mockito.mock;
 
 import hu.stan.dreamparkour.BaseUnitTest;
 import hu.stan.dreamparkour.common.helper.CourseRunHelper;
-import hu.stan.dreamparkour.model.Checkpoint;
-import hu.stan.dreamparkour.model.CheckpointLocation;
-import hu.stan.dreamparkour.model.Course;
-import hu.stan.dreamparkour.service.CourseService;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointLocation;
+import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamparkour.util.CourseRunUtils;
 import java.time.LocalDateTime;
 import java.util.UUID;

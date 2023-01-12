@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour.util;
 
-import hu.stan.dreamparkour.model.CheckpointNode;
+import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import java.time.LocalTime;
 
 public final class CourseRunUtils {

@@ -1,11 +1,11 @@
-package hu.stan.dreamparkour.service;
+package hu.stan.dreamparkour.service.course;
 
 import hu.stan.dreamparkour.cache.course.CourseCache;
 import hu.stan.dreamparkour.cache.course.CourseIdCache;
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
 import hu.stan.dreamparkour.exception.CourseAlreadyExistsException;
 import hu.stan.dreamparkour.exception.CourseNotFoundException;
-import hu.stan.dreamparkour.model.Course;
+import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.impl.EmptyCourseRepository;
 import hu.stan.dreamparkour.repository.impl.JpaCourseRepository;
@@ -105,9 +105,13 @@ public class CourseService {
   }
 
   public Optional<Course> findCourseBy(final String courseName) {
-    final var courseId = Optional.ofNullable(courseIdCache.get(courseName.toLowerCase()));
+    final var courseId = Optional.ofNullable(getIdForCourse(courseName));
     return findCourseBy(courseId.orElseThrow(
         () -> new CourseNotFoundException(courseName)));
+  }
+
+  public UUID getIdForCourse(final String courseName) {
+    return courseIdCache.get(courseName.toLowerCase());
   }
 
   public List<Course> findAll() {

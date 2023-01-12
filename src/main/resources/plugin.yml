@@ -2,6 +2,8 @@ name: DreamParkour
 version: '${project.version}'
 main: hu.stan.dreamparkour.DreamParkour
 api-version: 1.19
-depend: [ WorldGuard ]
 authors: [ StanHUN ]
 description: A simple parkour plugin
+
+softdepend:
+  - PlaceholderAPI
