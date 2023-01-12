@@ -1,21 +1,21 @@
 package hu.stan.dreamparkour.service.runtime;
 
-import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
 import hu.stan.dreamparkour.model.TotalRunTime;
 import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.course.CourseRun;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
-import hu.stan.dreamparkour.repository.impl.EmptyRunTimeRepository;
-import hu.stan.dreamparkour.repository.impl.RunTimeRepositoryImpl;
+import hu.stan.dreamparkour.repository.impl.JpaRunTimeRepository;
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
-import java.time.LocalTime;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import java.time.LocalTime;
+import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -27,15 +27,10 @@ public class RunTimeService {
 
   public RunTimeService(
       final BestTimeService bestTimeService,
-      final DatabaseConfiguration configuration,
       final CourseService courseService) {
     this.bestTimeService = bestTimeService;
     this.courseService = courseService;
-    if (configuration.enabled) {
-      runTimeRepository = new RunTimeRepositoryImpl();
-    } else {
-      runTimeRepository = new EmptyRunTimeRepository();
-    }
+    this.runTimeRepository = new JpaRunTimeRepository();
     initBestTimes();
   }
 
@@ -61,7 +56,9 @@ public class RunTimeService {
     Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(),
         () -> courseService.findAll().forEach(course -> {
           final var bestSplitTime = runTimeRepository.getBestSplitTimesForCourseAndPlayer(course, player);
-          bestTimeService.recordBestRunSplitTimes(player, course, bestSplitTime);
+          if (Objects.nonNull(bestSplitTime)) {
+            bestTimeService.recordBestRunSplitTimes(player, course, bestSplitTime);
+          }
         }));
   }
 
@@ -99,7 +96,9 @@ public class RunTimeService {
     Bukkit.getServer().getOnlinePlayers().forEach(
         player -> {
           final var bestSplitTime = runTimeRepository.getBestSplitTimesForCourseAndPlayer(course, player);
-          bestTimeService.recordBestRunSplitTimes(player, course, bestSplitTime);
+          if (Objects.nonNull(bestSplitTime)) {
+            bestTimeService.recordBestRunSplitTimes(player, course, bestSplitTime);
+          }
         }
     );
   }

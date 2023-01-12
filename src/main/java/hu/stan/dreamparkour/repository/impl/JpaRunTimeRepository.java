@@ -10,17 +10,18 @@ import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.util.HibernateUtils;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
-import java.util.List;
 import org.bukkit.entity.Player;
 import org.hibernate.SessionFactory;
 
-public class RunTimeRepositoryImpl implements RunTimeRepository {
+import java.util.List;
+
+public class JpaRunTimeRepository implements RunTimeRepository {
 
   private final SessionFactory sessionFactory;
   private final TotalRunTimeMapper totalRunTimeMapper;
   private final SplitRunTimeMapper splitRunTimeMapper;
 
-  public RunTimeRepositoryImpl() {
+  public JpaRunTimeRepository() {
     this.totalRunTimeMapper = DependencyInjector.getInstance().getInstanceOf(TotalRunTimeMapper.class);
     this.splitRunTimeMapper = DependencyInjector.getInstance().getInstanceOf(SplitRunTimeMapper.class);
     sessionFactory = HibernateUtils.getInstance().getSessionFactory();

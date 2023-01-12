@@ -11,7 +11,4 @@ public class ParkourConfiguration {
 
   @ConfigurationField(defaultValue = "1", description = "Controls how often the actionbar should be updated.")
   public Integer actionBarTickSpeed;
-
-  @ConfigurationField(defaultValue = "test", description = "Test to see if it will update it")
-  public String test;
 }

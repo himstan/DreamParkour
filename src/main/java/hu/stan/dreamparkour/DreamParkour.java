@@ -1,5 +1,6 @@
 package hu.stan.dreamparkour;
 
+import hu.stan.dreamparkour.repository.util.HibernateUtils;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Plugin;
 
@@ -13,6 +14,6 @@ public final class DreamParkour extends DreamPlugin {
 
   @Override
   public void onPluginDisable() {
-
+    HibernateUtils.shutdown();
   }
 }

@@ -1,15 +1,9 @@
 package hu.stan.dreamparkour.repository.util;
 
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
-import hu.stan.dreamparkour.model.entity.DbCheckpoint;
-import hu.stan.dreamparkour.model.entity.DbCourse;
-import hu.stan.dreamparkour.model.entity.DbLocation;
-import hu.stan.dreamparkour.model.entity.DbSplitRunTime;
-import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
+import hu.stan.dreamparkour.model.entity.*;
 import hu.stan.dreamplugin.core.configuration.registry.ConfigurationRegistrar;
 import hu.stan.dreamplugin.exception.DreamPluginException;
-import java.sql.DriverManager;
-import java.util.Objects;
 import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -18,13 +12,20 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
 
 public final class HibernateUtils {
 
   private final DatabaseConfiguration configuration;
   private final SessionFactory sessionFactory;
   private static HibernateUtils instance;
+
+  private SessionConfigFactory sessionConfigFactory;
 
   private HibernateUtils() {
     this.configuration = ConfigurationRegistrar.getConfiguration(DatabaseConfiguration.class);
@@ -42,12 +43,19 @@ public final class HibernateUtils {
     return instance;
   }
 
-  private void setupLiquibase() {
+  public static void shutdown() {
+    final var sessionFactory = getInstance().getSessionFactory();
+    sessionFactory.getCache().evictAllRegions();
+    sessionFactory.close();
+    try (final Connection conn = DriverManager.getConnection(getInstance().getSessionConfigFactory().getUrl() + ";SHUTDOWN=TRUE")) {
+    } catch (final SQLException ignored) {
+    }
+  }
+
+  private void setupLiquibase(final SessionConfigFactory sessionConfigFactory) {
     try {
       final DatabaseConnection connection = new JdbcConnection(DriverManager.getConnection(
-          getDatabaseUrl(),
-          configuration.username,
-          configuration.password));
+          sessionConfigFactory.getUrl()));
       final Database database = DatabaseFactory.getInstance()
           .findCorrectDatabaseImplementation(connection);
       updateLiquibase(database);
@@ -65,27 +73,16 @@ public final class HibernateUtils {
     }
   }
 
-  private String getDatabaseUrl() {
-    return String.format("jdbc:mysql://%s:%d/%s",
-        configuration.hostname,
-        configuration.port,
-        configuration.database);
+  private SessionFactory setupSessionFactory() {
+    sessionConfigFactory = getSessionConfigFactory();
+    setupLiquibase(sessionConfigFactory);
+    return sessionConfigFactory.getConfiguration().buildSessionFactory();
   }
 
-  private SessionFactory setupSessionFactory() {
-    setupLiquibase();
-    final Configuration config = new Configuration();
-    config.addAnnotatedClass(DbCourse.class);
-    config.addAnnotatedClass(DbCheckpoint.class);
-    config.addAnnotatedClass(DbLocation.class);
-    config.addAnnotatedClass(DbTotalRunTime.class);
-    config.addAnnotatedClass(DbSplitRunTime.class);
-    config.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-    config.setProperty("hibernate.connection.url", getDatabaseUrl());
-    config.setProperty("hibernate.connection.username", configuration.username);
-    config.setProperty("hibernate.connection.password", configuration.password);
-    config.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-    config.setProperty("hibernate.jdbc.batch_size", "10");
-    return config.buildSessionFactory();
+  private SessionConfigFactory getSessionConfigFactory() {
+    final List<Class<?>> classes = List.of(DbCourse.class, DbCheckpoint.class, DbLocation.class, DbTotalRunTime.class, DbSplitRunTime.class);
+    return configuration.enabled
+            ? new MySqlSessionConfigFactory(classes, configuration)
+            : new H2SessionConfigFactory(classes);
   }
 }

@@ -7,8 +7,8 @@
   objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
   <changeSet id="167122963047453-1" author="kriheg (generated)">
     <createTable tableName="DbSplitRunTime">
-      <column name="run_id" type="UUID">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dbrunid"/>
+      <column name="split_run_id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_dbsplitrunid"/>
       </column>
       <column name="player_id" type="UUID"/>
       <column name="checkpoint_checkpoint_id" type="UUID"/>

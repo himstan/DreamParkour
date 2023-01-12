@@ -5,11 +5,14 @@ import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.entity.DbCourse;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.util.HibernateUtils;
+import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import org.bukkit.Bukkit;
+import org.hibernate.SessionFactory;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.hibernate.SessionFactory;
 
 public class JpaCourseRepository implements CourseRepository {
 
@@ -23,22 +26,26 @@ public class JpaCourseRepository implements CourseRepository {
 
   @Override
   public void saveCourse(final Course course) {
-    final var dbCourse = courseMapper.toDbCourse(course);
-    final var session = sessionFactory.openSession();
-    session.beginTransaction();
-    session.merge(dbCourse);
-    session.getTransaction().commit();
-    session.close();
+    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
+      final var dbCourse = courseMapper.toDbCourse(course);
+      final var session = sessionFactory.openSession();
+      session.beginTransaction();
+      session.merge(dbCourse);
+      session.getTransaction().commit();
+      session.close();
+    });
   }
 
   @Override
   public void removeCourse(final Course course) {
-    final var dbCourse = courseMapper.toDbCourse(course);
-    final var session = sessionFactory.openSession();
-    session.beginTransaction();
-    session.remove(dbCourse);
-    session.getTransaction().commit();
-    session.close();
+    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
+      final var dbCourse = courseMapper.toDbCourse(course);
+      final var session = sessionFactory.openSession();
+      session.beginTransaction();
+      session.remove(dbCourse);
+      session.getTransaction().commit();
+      session.close();
+    });
   }
 
   @Override

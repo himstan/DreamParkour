@@ -7,16 +7,14 @@ import hu.stan.dreamparkour.exception.CourseAlreadyExistsException;
 import hu.stan.dreamparkour.exception.CourseNotFoundException;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.repository.CourseRepository;
-import hu.stan.dreamparkour.repository.impl.EmptyCourseRepository;
 import hu.stan.dreamparkour.repository.impl.JpaCourseRepository;
-import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
-import org.bukkit.Bukkit;
 
 @Slf4j
 @Service
@@ -33,14 +31,9 @@ public class CourseService {
     this.databaseConfiguration = databaseConfiguration;
     this.courseCache = courseCache;
     this.courseIdCache = courseIdCache;
-    if (databaseConfiguration.enabled) {
     this.courseRepository =
         (CourseRepository) DependencyInjector.getInstance().initializeClass(JpaCourseRepository.class);
-      this.setupCourses();
-    } else {
-      this.courseRepository =
-          (CourseRepository) DependencyInjector.getInstance().initializeClass(EmptyCourseRepository.class);
-    }
+    this.setupCourses();
   }
 
   public Course createCourse(final String courseName) {
@@ -61,9 +54,7 @@ public class CourseService {
     disableCourse(loweredName);
     courseIdCache.remove(loweredName);
     courseCache.remove(courseId);
-    if (databaseConfiguration.enabled) {
-      courseRepository.removeCourse(course);
-    }
+    courseRepository.removeCourse(course);
     log.info("Removing course! Id: [{}] Name: [{}]", course.getCourseId(), course.getCourseName());
     return course;
   }
@@ -127,12 +118,8 @@ public class CourseService {
   }
 
   private void persistCourse(final Course course) {
-    if (databaseConfiguration.enabled) {
-      Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
-        log.info("Saving course to database: [{}]", course.getCourseId());
-        courseRepository.saveCourse(course);
-      });
-    }
+    log.info("Saving course to database: [{}]", course.getCourseId());
+    courseRepository.saveCourse(course);
   }
 
   private void setupCourses() {
