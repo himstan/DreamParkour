@@ -7,6 +7,7 @@ import hu.stan.dreamparkour.model.course.CourseRun;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.impl.JpaRunTimeRepository;
 import hu.stan.dreamparkour.service.course.CourseService;
+import hu.stan.dreamparkour.service.toprunners.TopRunnersService;
 import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +25,15 @@ public class RunTimeService {
   private final BestTimeService bestTimeService;
   private final RunTimeRepository runTimeRepository;
   private final CourseService courseService;
+  private final TopRunnersService topRunnersService;
 
   public RunTimeService(
       final BestTimeService bestTimeService,
-      final CourseService courseService) {
+      final CourseService courseService,
+      final TopRunnersService topRunnersService) {
     this.bestTimeService = bestTimeService;
     this.courseService = courseService;
+    this.topRunnersService = topRunnersService;
     this.runTimeRepository = new JpaRunTimeRepository();
     initBestTimes();
   }
@@ -49,6 +53,7 @@ public class RunTimeService {
       log.info("Player [{}] has ran a new best time in course: [{}]! Time: [{}]",
           player.getName(), course.getCourseName(), runTime);
     }
+    topRunnersService.recordRun(player, courseRun.getCourse(), runTime);
     persistRunTime(player, runTime, course, courseRun.getCurrentCheckpoint());
   }
 

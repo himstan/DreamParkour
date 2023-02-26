@@ -5,5 +5,4 @@ api-version: 1.19
 authors: [ StanHUN ]
 description: A simple parkour plugin
 
-softdepend:
-  - PlaceholderAPI
+softdepend: [PlaceholderAPI]

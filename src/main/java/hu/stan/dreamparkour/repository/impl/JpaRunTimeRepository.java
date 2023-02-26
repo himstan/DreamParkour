@@ -1,5 +1,6 @@
 package hu.stan.dreamparkour.repository.impl;
 
+import hu.stan.dreamparkour.configuration.ParkourConfiguration;
 import hu.stan.dreamparkour.mapper.SplitRunTimeMapper;
 import hu.stan.dreamparkour.mapper.TotalRunTimeMapper;
 import hu.stan.dreamparkour.model.TotalRunTime;
@@ -9,6 +10,7 @@ import hu.stan.dreamparkour.model.entity.DbSplitRunTime;
 import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.util.HibernateUtils;
+import hu.stan.dreamplugin.core.configuration.registry.ConfigurationRegistrar;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
 import org.bukkit.entity.Player;
 import org.hibernate.SessionFactory;
@@ -20,11 +22,13 @@ public class JpaRunTimeRepository implements RunTimeRepository {
   private final SessionFactory sessionFactory;
   private final TotalRunTimeMapper totalRunTimeMapper;
   private final SplitRunTimeMapper splitRunTimeMapper;
+  private final ParkourConfiguration parkourConfiguration;
 
   public JpaRunTimeRepository() {
     this.totalRunTimeMapper = DependencyInjector.getInstance().getInstanceOf(TotalRunTimeMapper.class);
     this.splitRunTimeMapper = DependencyInjector.getInstance().getInstanceOf(SplitRunTimeMapper.class);
-    sessionFactory = HibernateUtils.getInstance().getSessionFactory();
+    this.parkourConfiguration = ConfigurationRegistrar.getConfiguration(ParkourConfiguration.class);
+    this.sessionFactory = HibernateUtils.getInstance().getSessionFactory();
   }
 
   @Override
@@ -85,6 +89,23 @@ public class JpaRunTimeRepository implements RunTimeRepository {
               + "WHERE course.courseId = :courseId "
               + "AND runTime = (SELECT MIN(runTime) FROM DbTotalRunTime dtrt2 WHERE playerId = dtrt.playerId) "
               + "GROUP BY playerId", DbTotalRunTime.class);
+      query.setParameter("courseId", course.getCourseId().toString());
+      final var bestTimesForCourse = query.getResultList();
+      session.getTransaction().commit();
+      return mapToTotalRunTimes(bestTimesForCourse);
+    }
+  }
+
+  @Override
+  public List<TotalRunTime> getTopRunsForCourse(final Course course) {
+    try (final var session = sessionFactory.openSession()) {
+      session.beginTransaction();
+      final var query = session.createQuery(
+          "SELECT dtrt "
+              + "FROM DbTotalRunTime dtrt "
+              + "WHERE course.courseId = :courseId "
+              + "ORDER BY dtrt.runTime ASC ", DbTotalRunTime.class);
+      query.setMaxResults(parkourConfiguration.topRunsPerCourseInCache);
       query.setParameter("courseId", course.getCourseId().toString());
       final var bestTimesForCourse = query.getResultList();
       session.getTransaction().commit();

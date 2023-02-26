@@ -7,10 +7,11 @@ import hu.stan.dreamparkour.model.checkpoint.CheckpointLocation;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamplugin.annotation.core.Service;
 import hu.stan.dreamplugin.core.translation.Translate;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +74,7 @@ public class CourseBuilderService {
       courseService.findCourseBy(courseId).ifPresentOrElse(
           course -> {
             handleFlatCheckpoint(checkpoint);
+            roundCheckpointLocations(checkpoint);
             course.addCheckpoint(checkpoint);
             courseService.saveCourse(course);
             removeCheckpointFromBuilder(player);
@@ -83,10 +85,18 @@ public class CourseBuilderService {
     }
   }
 
+  private void roundCheckpointLocations(final Checkpoint checkpoint) {
+    checkpoint.getStartLocation().getLocation().setX(Math.floor(checkpoint.getStartLocation().getLocation().getX()));
+    checkpoint.getStartLocation().getLocation().setY(Math.floor(checkpoint.getStartLocation().getLocation().getY()));
+    checkpoint.getStartLocation().getLocation().setZ(Math.floor(checkpoint.getStartLocation().getLocation().getZ()));
+    checkpoint.getEndLocation().getLocation().setX(Math.floor(checkpoint.getEndLocation().getLocation().getX() + 1));
+    checkpoint.getEndLocation().getLocation().setY(Math.floor(checkpoint.getEndLocation().getLocation().getY() + 1));
+    checkpoint.getEndLocation().getLocation().setZ(Math.floor(checkpoint.getEndLocation().getLocation().getZ() + 1));
+  }
+
   private void handleFlatCheckpoint(final Checkpoint checkpoint) {
     if (getHeighDifferenceBetweenLocations(checkpoint) < 1) {
       final var y = checkpoint.getStartLocation().getLocation().getBlockY();
-      checkpoint.getStartLocation().getLocation().setY(y - 1d);
       checkpoint.getEndLocation().getLocation().setY(y + 1d);
     }
   }

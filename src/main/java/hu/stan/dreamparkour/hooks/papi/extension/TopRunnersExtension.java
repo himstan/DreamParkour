@@ -2,11 +2,13 @@ package hu.stan.dreamparkour.hooks.papi.extension;
 
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamparkour.service.toprunners.TopRunnersService;
-import java.util.Arrays;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class TopRunnersExtension extends PlaceholderExpansion {
@@ -15,17 +17,17 @@ public class TopRunnersExtension extends PlaceholderExpansion {
   private final TopRunnersService topRunnersService;
 
   @Override
-  public String getIdentifier() {
-    return "top_run";
+  public @NotNull String getIdentifier() {
+    return "toprun";
   }
 
   @Override
-  public String getAuthor() {
+  public @NotNull String getAuthor() {
     return "StanHUN";
   }
 
   @Override
-  public String getVersion() {
+  public @NotNull String getVersion() {
     return "1.0.0";
   }
 
@@ -35,7 +37,7 @@ public class TopRunnersExtension extends PlaceholderExpansion {
   }
 
   @Override
-  public String onRequest(final OfflinePlayer p, final String identifier) {
+  public String onRequest(final OfflinePlayer p, final @NotNull String identifier) {
     final var args = getArguments(identifier);
     if (args.size() < 3) {
       return "Not enough arguments were passed to the placeholder!";
@@ -58,8 +60,6 @@ public class TopRunnersExtension extends PlaceholderExpansion {
   }
 
   private List<String> getArguments(final String identifier) {
-    var parts = identifier.split(":");
-    parts = Arrays.copyOfRange(parts, 1, parts.length);
-    return Arrays.asList(parts);
+    return Arrays.asList(identifier.split(":"));
   }
 }

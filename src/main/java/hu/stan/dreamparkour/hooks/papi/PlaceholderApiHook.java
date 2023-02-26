@@ -6,7 +6,6 @@ import hu.stan.dreamparkour.service.toprunners.TopRunnersService;
 import hu.stan.dreamplugin.annotation.core.ExternalHook;
 import hu.stan.dreamplugin.core.pluginhook.PluginHook;
 import lombok.RequiredArgsConstructor;
-import me.clip.placeholderapi.PlaceholderAPI;
 
 @ExternalHook(pluginName = "PlaceholderAPI")
 @RequiredArgsConstructor
@@ -17,11 +16,13 @@ public class PlaceholderApiHook implements PluginHook {
 
   @Override
   public void registerHook() {
-    PlaceholderAPI.registerExpansion(new TopRunnersExtension(courseService, topRunnersService));
+    final var extension = new TopRunnersExtension(courseService, topRunnersService);
+    extension.register();
   }
 
   @Override
   public void unregisterHook() {
-    PlaceholderAPI.unregisterExpansion(new TopRunnersExtension(courseService, topRunnersService));
+    final var extension = new TopRunnersExtension(courseService, topRunnersService);
+    extension.unregister();
   }
 }

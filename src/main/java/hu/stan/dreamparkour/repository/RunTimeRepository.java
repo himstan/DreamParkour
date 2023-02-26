@@ -3,8 +3,9 @@ package hu.stan.dreamparkour.repository;
 import hu.stan.dreamparkour.model.TotalRunTime;
 import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.course.Course;
-import java.util.List;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public interface RunTimeRepository {
 
@@ -15,4 +16,6 @@ public interface RunTimeRepository {
   CheckpointNode getBestSplitTimesForCourseAndPlayer(Course course, Player player);
 
   List<TotalRunTime> getBestTimesForCoursePerPlayer(final Course course);
+
+  List<TotalRunTime> getTopRunsForCourse(final Course course);
 }

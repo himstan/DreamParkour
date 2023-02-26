@@ -9,10 +9,11 @@ import hu.stan.dreamplugin.common.helper.StringHelper;
 import hu.stan.dreamplugin.core.command.DreamCommandExecutor;
 import hu.stan.dreamplugin.core.command.DreamTabCompleter;
 import hu.stan.dreamplugin.core.translation.Translate;
-import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
+
+import java.util.Collections;
+import java.util.List;
 
 @Command(
     parentCommand = DreamParkourCommand.class,
