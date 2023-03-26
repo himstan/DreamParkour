@@ -53,23 +53,13 @@ public final class HibernateUtils {
   }
 
   private void setupLiquibase(final SessionConfigFactory sessionConfigFactory) {
-    try {
-      final DatabaseConnection connection = new JdbcConnection(DriverManager.getConnection(
-          sessionConfigFactory.getUrl()));
-      final Database database = DatabaseFactory.getInstance()
-          .findCorrectDatabaseImplementation(connection);
-      updateLiquibase(database);
+    try(final Connection connection = DriverManager.getConnection(sessionConfigFactory.getUrl())) {
+      final DatabaseConnection databaseConnection = new JdbcConnection(connection);
+        final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(databaseConnection);
+        final Liquibase liquibase = new liquibase.Liquibase("db/master.xml", new ClassLoaderResourceAccessor(), database);
+        liquibase.update(new Contexts());
     } catch (final Exception e) {
       throw new DreamPluginException("There was an error while running liquibase updates.", e);
-    }
-  }
-
-  private void updateLiquibase(final Database database) throws Exception {
-    try (final Liquibase liquibase = new Liquibase("db/master.xml",
-        new ClassLoaderResourceAccessor(), database)) {
-      liquibase.update(new Contexts());
-    } catch (final ClassCastException ignored) {
-      // There is a liquibase bug which we just ignore because it doesn't really affect anything.
     }
   }
 

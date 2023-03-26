@@ -29,9 +29,11 @@ public class MySqlSessionConfigFactory implements SessionConfigFactory {
 
 
     public String getUrl() {
-        return String.format("jdbc:mysql://%s:%d/%s",
-                databaseConfiguration.hostname,
-                databaseConfiguration.port,
-                databaseConfiguration.database);
+        return String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s",
+            databaseConfiguration.hostname,
+            databaseConfiguration.port,
+            databaseConfiguration.database,
+            databaseConfiguration.username,
+            databaseConfiguration.password);
     }
 }

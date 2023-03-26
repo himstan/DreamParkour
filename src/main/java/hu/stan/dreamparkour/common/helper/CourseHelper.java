@@ -4,10 +4,12 @@ import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.annotation.core.Component;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -36,6 +38,9 @@ public class CourseHelper {
    * @return true, if the player is inside the checkpoint, false otherwise.
    */
   public boolean isPlayerInCheckpoint(final Player player, final Checkpoint checkpoint) {
+    if (!isPlayerAndCheckpointInTheSameWorld(player, checkpoint)) {
+      return false;
+    }
     final var playerLocation = player.getLocation();
     final var startLocation = checkpoint.getStartLocation().getLocation();
     final var endLocation = checkpoint.getEndLocation().getLocation();
@@ -43,6 +48,12 @@ public class CourseHelper {
     final double distanceToEnd = Math.ceil(playerLocation.distanceSquared(endLocation));
     final double regionDistance = Math.floor(startLocation.distanceSquared(endLocation));
     return distanceToStart + distanceToEnd <= regionDistance;
+  }
+
+  private boolean isPlayerAndCheckpointInTheSameWorld(final Player player, final Checkpoint checkpoint) {
+    final var playerWorld = player.getLocation().getWorld();
+    final var checkpointWorld = checkpoint.getStartLocation().getLocation().getWorld();
+    return Objects.equals(playerWorld, checkpointWorld);
   }
 
   private boolean isPlayerStandingOnFirstCheckpoint(final Player player, final Course course) {
