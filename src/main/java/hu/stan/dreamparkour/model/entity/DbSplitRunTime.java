@@ -23,9 +23,11 @@ public class DbSplitRunTime {
   private String playerId;
 
   @ManyToOne
+  @JoinColumn(name = "checkpoint_id")
   private DbCheckpoint checkpoint;
 
   @ManyToOne
+  @JoinColumn(name = "run_id")
   private DbTotalRunTime totalRun;
 
   @Convert(converter = LocalTimeAttributeConverter.class)

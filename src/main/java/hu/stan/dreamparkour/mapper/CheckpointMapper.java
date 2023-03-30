@@ -3,8 +3,9 @@ package hu.stan.dreamparkour.mapper;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.entity.DbCheckpoint;
 import hu.stan.dreamplugin.annotation.core.Component;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class CheckpointMapper {
     dbCheckpoint.setStartingLocation(locationMapper.toDbLocation(checkpoint.getStartLocation()));
     dbCheckpoint.setEndingLocation(locationMapper.toDbLocation(checkpoint.getEndLocation()));
     dbCheckpoint.setCreatedAt(checkpoint.getCreatedAt());
+    dbCheckpoint.setDeleted(checkpoint.isDeleted());
     return dbCheckpoint;
   }
 
@@ -28,6 +30,7 @@ public class CheckpointMapper {
         dbCheckpoint.getEnabled(),
         locationMapper.toLocation(dbCheckpoint.getStartingLocation()),
         locationMapper.toLocation(dbCheckpoint.getEndingLocation()),
-        dbCheckpoint.getCreatedAt());
+        dbCheckpoint.getCreatedAt(),
+        dbCheckpoint.getDeleted());
   }
 }

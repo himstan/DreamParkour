@@ -1,11 +1,8 @@
 package hu.stan.dreamparkour.model.entity;
 
 import hu.stan.dreamparkour.repository.converter.LocalTimeAttributeConverter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.time.LocalTime;
 import java.util.UUID;
 import lombok.Getter;
@@ -26,6 +23,7 @@ public class DbTotalRunTime {
   private String playerId;
 
   @ManyToOne
+  @JoinColumn(name = "course_id")
   private DbCourse course;
 
   @Convert(converter = LocalTimeAttributeConverter.class)

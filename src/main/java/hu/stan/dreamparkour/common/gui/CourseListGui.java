@@ -1,36 +1,38 @@
 package hu.stan.dreamparkour.common.gui;
 
 import hu.stan.dreamparkour.model.course.Course;
+import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
 import hu.stan.dreamplugin.core.gui.model.GuiItem;
-import hu.stan.dreamplugin.core.gui.model.PaginatedGui;
+import hu.stan.dreamplugin.core.gui.model.ListGui;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
+import java.util.Comparator;
 import java.util.List;
 
-public class CourseListGui extends PaginatedGui {
+public class CourseListGui extends ListGui {
 
-  public CourseListGui(final List<Course> courses) {
-    super("Courses", 36, getItems(courses), 9);
-    setYOffset(1);
+  private final CourseService courseService;
+
+  public CourseListGui(final List<Course> courses, final CourseService courseService) {
+    super("Courses");
+    this.courseService = courseService;
+    setItems(getItems(courses));
   }
 
-  @Override
-  public void handlePaginatedItemClick(final Player player, final int slot, final GuiItem item) {
-    item.onClick(player, slot);
+  private List<GuiItem> getItems(final List<Course> courses) {
+    return courses.stream()
+            .sorted(Comparator.comparing(Course::getCourseName))
+            .map(this::getItem)
+            .toList();
   }
 
-  private static List<GuiItem> getItems(final List<Course> courses) {
-    return courses.stream().map(CourseListGui::getItem).toList();
-  }
-
-  private static GuiItem getItem(final Course course) {
+  private GuiItem getItem(final Course course) {
     return new GuiItemBuilder()
         .displayName(course.getCourseName())
         .material(Material.OAK_LOG)
         .onClick((player, slot) -> {
-          final var detailsGui = new CourseDetailsGui(course);
+          final var detailsGui = new CourseDetailsGui(course, courseService);
           player.closeInventory();
           detailsGui.open(player);
         })

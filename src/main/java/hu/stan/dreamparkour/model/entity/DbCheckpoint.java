@@ -1,22 +1,19 @@
 package hu.stan.dreamparkour.model.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Table;
+import org.hibernate.annotations.Where;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Setter
 @Getter
 @Table(appliesTo = "DbCheckpoint")
+@Where(clause = "deleted = false")
 public class DbCheckpoint {
 
   @Id
@@ -34,7 +31,11 @@ public class DbCheckpoint {
   @JoinColumn(name = "end_location_id", referencedColumnName = "location_id")
   private DbLocation endingLocation;
 
+  @Column
+  private Boolean deleted = false;
+
   @ManyToOne
+  @JoinColumn(name = "course_id", referencedColumnName = "course_id")
   private DbCourse course;
 
   @Column(name = "created_at")

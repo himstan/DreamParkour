@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class H2SessionConfigFactory implements SessionConfigFactory {
+public class SqliteSessionConfigFactory implements SessionConfigFactory {
 
     private final List<Class<?>> entityClasses;
     private File databaseFolder;
@@ -23,26 +23,47 @@ public class H2SessionConfigFactory implements SessionConfigFactory {
         entityClasses.forEach(
                 config::addAnnotatedClass
         );
+        config.setProperty("hibernate.dialect", "org.hibernate.community.dialect.SQLiteDialect");
         config.setProperty("hibernate.connection.provider_class", "com.zaxxer.hikari.hibernate.HikariConnectionProvider");
         config.setProperty("hibernate.hikari.minimumIdle", "5");
         config.setProperty("hibernate.hikari.maximumPoolSize", "10");
         config.setProperty("hibernate.hikari.idleTimeout", "30000");
-        config.setProperty("hibernate.hikari.dataSourceClassName", "org.h2.jdbcx.JdbcDataSource");
-        config.setProperty("hibernate.hikari.dataSource.url", getUrl() + ";AUTO_SERVER=TRUE");
+        config.setProperty("hibernate.hikari.dataSourceClassName", "org.sqlite.SQLiteDataSource");
+        config.setProperty("hibernate.hikari.dataSource.url", getUrlWithCredentials());
         return config;
     }
 
-    public String getUrl() {
+    public String getUrlWithCredentials() {
         setupDatabaseFile();
-        return String.format("jdbc:h2:~/%s/database/database",
+        return String.format("jdbc:sqlite:plugins/%s/database/database.db",
             DreamPlugin.getInstance().getDataFolder().getName());
+    }
+
+    @Override
+    public String getUrl() {
+        return getUrlWithCredentials();
+    }
+
+    @Override
+    public String userName() {
+        return "";
+    }
+
+    @Override
+    public String password() {
+        return "";
+    }
+
+    @Override
+    public String getDatabaseType() {
+        return "h2";
     }
 
     private void setupDriver() {
         try {
-            Class.forName ("org.h2.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch (final ClassNotFoundException e) {
-            throw new DreamPluginException("Couldn't find H2 JDBC Driver.", e);
+            throw new DreamPluginException("Couldn't find SQLite JDBC Driver.", e);
         }
     }
 
@@ -61,12 +82,12 @@ public class H2SessionConfigFactory implements SessionConfigFactory {
 
     private void createDatabaseFileIfDoesntExist() {
         try {
-            databaseFile = new File(databaseFolder, "database");
+            databaseFile = new File(databaseFolder, "database.db");
             if (!databaseFile.exists()) {
                 databaseFile.createNewFile();
             }
         } catch (final IOException e) {
-                throw new DreamPluginException("There was a problem creating the H2 database file", e);
+                throw new DreamPluginException("There was a problem creating the Sqlite database file", e);
         }
     }
 }

@@ -6,5 +6,13 @@ public interface SessionConfigFactory {
 
     Configuration getConfiguration();
 
+    String getUrlWithCredentials();
+
     String getUrl();
+
+    String userName();
+
+    String password();
+
+    String getDatabaseType();
 }

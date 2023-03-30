@@ -19,7 +19,7 @@ public class MySqlSessionConfigFactory implements SessionConfigFactory {
                 config::addAnnotatedClass
         );
         config.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        config.setProperty("hibernate.connection.url", getUrl());
+        config.setProperty("hibernate.connection.url", getUrlWithCredentials());
         config.setProperty("hibernate.connection.username", databaseConfiguration.username);
         config.setProperty("hibernate.connection.password", databaseConfiguration.password);
         config.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
@@ -28,12 +28,35 @@ public class MySqlSessionConfigFactory implements SessionConfigFactory {
     }
 
 
-    public String getUrl() {
+    public String getUrlWithCredentials() {
         return String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s",
             databaseConfiguration.hostname,
             databaseConfiguration.port,
             databaseConfiguration.database,
             databaseConfiguration.username,
             databaseConfiguration.password);
+    }
+
+    @Override
+    public String getUrl() {
+        return String.format("jdbc:mysql://%s:%d/%s",
+            databaseConfiguration.hostname,
+            databaseConfiguration.port,
+            databaseConfiguration.database);
+    }
+
+    @Override
+    public String userName() {
+        return databaseConfiguration.username;
+    }
+
+    @Override
+    public String password() {
+        return databaseConfiguration.password;
+    }
+
+    @Override
+    public String getDatabaseType() {
+        return "mysql";
     }
 }

@@ -1,10 +1,5 @@
 package hu.stan.dreamparkour.helper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-
 import hu.stan.dreamparkour.BaseUnitTest;
 import hu.stan.dreamparkour.common.helper.CourseRunHelper;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
@@ -12,14 +7,18 @@ import hu.stan.dreamparkour.model.checkpoint.CheckpointLocation;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamparkour.util.CourseRunUtils;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class CourseRunHelperTest extends BaseUnitTest {
 
@@ -71,7 +70,7 @@ public class CourseRunHelperTest extends BaseUnitTest {
 
   private Checkpoint buildCheckpoint(final UUID checkpointId, final Location location) {
     return new Checkpoint(
-        checkpointId, false, new CheckpointLocation(location), new CheckpointLocation(location), LocalDateTime.now());
+        checkpointId, false, new CheckpointLocation(location), new CheckpointLocation(location), LocalDateTime.now(), false);
   }
 
   private Location getLocation(final double x, final double y, final double z) {

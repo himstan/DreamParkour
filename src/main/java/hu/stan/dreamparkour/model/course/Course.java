@@ -1,12 +1,14 @@
 package hu.stan.dreamparkour.model.course;
 
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import hu.stan.dreamplugin.exception.DreamPluginException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 public class Course {
@@ -18,7 +20,6 @@ public class Course {
   @Setter
   private String courseName;
 
-  @Getter
   private final List<Checkpoint> checkpoints;
 
   public Course(final String courseName) {
@@ -35,11 +36,28 @@ public class Course {
     return checkpoints.get(0);
   }
 
+  public List<Checkpoint> getCheckpoints() {
+    return this.checkpoints.stream()
+        .filter(checkpoint -> !checkpoint.isDeleted())
+        .toList();
+  }
+
   public void addCheckpoint(final Checkpoint checkpoint) {
     checkpoints.add(checkpoint);
   }
 
+  public void removeCheckpoint(final Checkpoint checkpoint) {
+    if (checkpoints.contains(checkpoint)) {
+      checkpoint.setDeleted(true);
+    } else {
+      throw new DreamPluginException(String.format("Checkpoint: [%s] is not part of course: [%s]", checkpoint.getCheckpointId(), courseId));
+    }
+  }
+
   public void removeLastCheckpoint() {
-    checkpoints.remove(checkpoints.size() - 1);
+    final var checkpoints = getCheckpoints();
+    final var checkpointSize = checkpoints.size();
+    final var checkpoint = checkpoints.get(checkpointSize - 1);
+    checkpoint.setDeleted(true);
   }
 }

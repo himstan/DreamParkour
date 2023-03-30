@@ -21,7 +21,7 @@ public class ListCoursesGuiCommand implements DreamCommandExecutor {
 
   @Override
   public void onCommand(final Player sender, final String[] args) {
-    final var gui = new CourseListGui(courseService.findAll());
+    final var gui = new CourseListGui(courseService.findAll(), courseService);
     gui.open(sender);
   }
 }

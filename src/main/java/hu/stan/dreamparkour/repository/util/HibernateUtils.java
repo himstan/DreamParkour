@@ -2,15 +2,11 @@ package hu.stan.dreamparkour.repository.util;
 
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
 import hu.stan.dreamparkour.model.entity.*;
+import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.core.configuration.registry.ConfigurationRegistrar;
 import hu.stan.dreamplugin.exception.DreamPluginException;
-import liquibase.Contexts;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseConnection;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.hibernate.SessionFactory;
 
 import java.sql.Connection;
@@ -47,25 +43,23 @@ public final class HibernateUtils {
     final var sessionFactory = getInstance().getSessionFactory();
     sessionFactory.getCache().evictAllRegions();
     sessionFactory.close();
-    try (final Connection conn = DriverManager.getConnection(getInstance().getSessionConfigFactory().getUrl() + ";SHUTDOWN=TRUE")) {
-    } catch (final SQLException ignored) {
-    }
   }
 
-  private void setupLiquibase(final SessionConfigFactory sessionConfigFactory) {
-    try(final Connection connection = DriverManager.getConnection(sessionConfigFactory.getUrl())) {
-      final DatabaseConnection databaseConnection = new JdbcConnection(connection);
-        final Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(databaseConnection);
-        final Liquibase liquibase = new liquibase.Liquibase("db/master.xml", new ClassLoaderResourceAccessor(), database);
-        liquibase.update(new Contexts());
+  private void setupFlyway(final SessionConfigFactory sessionConfigFactory) {
+    try {
+      final var fluentConfiguration = new FluentConfiguration(DreamPlugin.class.getClassLoader())
+          .baselineOnMigrate(true)
+          .dataSource(sessionConfigFactory.getUrl(), sessionConfigFactory.userName(), sessionConfigFactory.password());
+      final var flyway = new Flyway(fluentConfiguration);
+      flyway.migrate();
     } catch (final Exception e) {
-      throw new DreamPluginException("There was an error while running liquibase updates.", e);
+      throw new DreamPluginException("There was an error while running flyway updates.", e);
     }
   }
 
   private SessionFactory setupSessionFactory() {
     sessionConfigFactory = getSessionConfigFactory();
-    setupLiquibase(sessionConfigFactory);
+    setupFlyway(sessionConfigFactory);
     return sessionConfigFactory.getConfiguration().buildSessionFactory();
   }
 
@@ -73,6 +67,6 @@ public final class HibernateUtils {
     final List<Class<?>> classes = List.of(DbCourse.class, DbCheckpoint.class, DbLocation.class, DbTotalRunTime.class, DbSplitRunTime.class);
     return configuration.enabled
             ? new MySqlSessionConfigFactory(classes, configuration)
-            : new H2SessionConfigFactory(classes);
+            : new SqliteSessionConfigFactory(classes);
   }
 }
