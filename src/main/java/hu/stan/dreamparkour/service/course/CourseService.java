@@ -2,15 +2,22 @@ package hu.stan.dreamparkour.service.course;
 
 import hu.stan.dreamparkour.cache.course.CourseCache;
 import hu.stan.dreamparkour.cache.course.CourseIdCache;
-import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
+import hu.stan.dreamparkour.event.DreamEvent;
+import hu.stan.dreamparkour.event.checkpoint.RemoveCheckpointEvent;
+import hu.stan.dreamparkour.event.course.InitializeCourseEvent;
+import hu.stan.dreamparkour.event.course.RemoveCourseEvent;
 import hu.stan.dreamparkour.exception.CourseAlreadyExistsException;
 import hu.stan.dreamparkour.exception.CourseNotFoundException;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.impl.JpaCourseRepository;
+import hu.stan.dreamplugin.DreamPlugin;
 import hu.stan.dreamplugin.annotation.core.Service;
 import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import hu.stan.dreamplugin.core.dependency.lifecycle.OnEnable;
 import lombok.extern.slf4j.Slf4j;
+import org.bukkit.Bukkit;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,33 +25,34 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class CourseService {
+public class CourseService implements OnEnable {
 
-  private final DatabaseConfiguration databaseConfiguration;
   private final CourseCache courseCache;
   private final CourseIdCache courseIdCache;
   private final CourseRepository courseRepository;
 
-  public CourseService(final DatabaseConfiguration databaseConfiguration,
-      final CourseCache courseCache,
-      final CourseIdCache courseIdCache) {
-    this.databaseConfiguration = databaseConfiguration;
+  public CourseService(final CourseCache courseCache,
+                       final CourseIdCache courseIdCache) {
     this.courseCache = courseCache;
     this.courseIdCache = courseIdCache;
     this.courseRepository =
         (CourseRepository) DependencyInjector.getInstance().initializeClass(JpaCourseRepository.class);
+  }
+
+  @Override
+  public void onEnable() {
     this.setupCourses();
   }
 
-  public Course createCourse(final String courseName) {
+  public void createCourse(final String courseName) {
     final var loweredName = courseName.toLowerCase();
     if (courseIdCache.exists(loweredName)) {
       throw new CourseAlreadyExistsException(courseName);
     }
-    return saveCourse(new Course(loweredName));
+    saveCourse(new Course(loweredName));
   }
 
-  public Course removeCourse(final String courseName) {
+  public void removeCourse(final String courseName) {
     final var loweredName = courseName.toLowerCase();
     if (!courseIdCache.exists(loweredName)) {
       throw new CourseNotFoundException(courseName);
@@ -56,7 +64,8 @@ public class CourseService {
     courseCache.remove(courseId);
     courseRepository.removeCourse(course);
     log.info("Removing course! Id: [{}] Name: [{}]", course.getCourseId(), course.getCourseName());
-    return course;
+    Bukkit.getPluginManager().callEvent(new RemoveCourseEvent(course));
+    course.getCheckpoints().forEach(checkpoint -> Bukkit.getPluginManager().callEvent(new RemoveCheckpointEvent(checkpoint)));
   }
 
   public void enableCourse(final String courseName) {
@@ -79,16 +88,14 @@ public class CourseService {
     );
   }
 
-  public Course saveCourse(final Course course) {
+  public void saveCourse(final Course course) {
     if (hasCourse(course.getCourseId())) {
       log.info("Updating course with id: [{}]", course.getCourseId());
     } else {
       log.info("Creating new course with id: [{}]", course.getCourseId());
     }
-    courseCache.add(course.getCourseId(), course);
-    courseIdCache.add(course.getCourseName(), course.getCourseId());
+    addCourse(course);
     persistCourse(course);
-    return course;
   }
 
   public Optional<Course> findCourseBy(final UUID courseId) {
@@ -117,9 +124,22 @@ public class CourseService {
     return courseIdCache.exists(courseName.toLowerCase());
   }
 
+  private void handleCheckpointRemoval(final Course course) {
+    final var deletedCheckpoints = course.getCheckpointsWithDeleted().stream()
+        .filter(Checkpoint::isDeleted)
+        .toList();
+    course.getCheckpointsWithDeleted().removeAll(deletedCheckpoints);
+  }
+
+  private void addCourse(final Course course) {
+    courseCache.add(course.getCourseId(), course);
+    courseIdCache.add(course.getCourseName(), course.getCourseId());
+  }
+
   private void persistCourse(final Course course) {
     log.info("Saving course to database: [{}]", course.getCourseId());
-    courseRepository.saveCourse(course);
+    courseRepository.saveCourse(course, (dbCourse) ->
+        handleCheckpointRemoval(course));
   }
 
   private void setupCourses() {
@@ -127,8 +147,12 @@ public class CourseService {
     final var courses = courseRepository.findAll();
     log.info("Found {} courses, adding them to cache.", courses.size());
     courses.forEach(course -> {
-      courseCache.add(course.getCourseId(), course);
-      courseIdCache.add(course.getCourseName(), course.getCourseId());
+      addCourse(course);
+      callEvent(new InitializeCourseEvent(course));
     });
+  }
+
+  private void callEvent(final DreamEvent dreamEvent) {
+    DreamPlugin.getInstance().getServer().getPluginManager().callEvent(dreamEvent);
   }
 }

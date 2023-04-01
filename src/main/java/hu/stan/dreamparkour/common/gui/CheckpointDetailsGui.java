@@ -1,8 +1,10 @@
 package hu.stan.dreamparkour.common.gui;
 
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
+import hu.stan.dreamplugin.core.gui.model.ConfirmGui;
 import hu.stan.dreamplugin.core.gui.model.Gui;
 import hu.stan.dreamplugin.core.gui.model.GuiItem;
 import hu.stan.dreamplugin.core.gui.model.NavigableGui;
@@ -12,15 +14,23 @@ import org.bukkit.entity.Player;
 
 import static hu.stan.dreamplugin.core.gui.util.GuiConstants.ROW_LENGTH;
 
-public class CourseDetailsGui extends Gui implements NavigableGui {
+public class CheckpointDetailsGui extends Gui implements NavigableGui {
 
   private final CourseService courseService;
+  private final Checkpoint checkpoint;
   private final Course course;
 
-  public CourseDetailsGui(final String title, final Course course, final CourseService courseService) {
+  public CheckpointDetailsGui(final String title, final Course course, final Checkpoint checkpoint, final CourseService courseService) {
     super(title, 3);
-    this.courseService = courseService;
+    this.checkpoint = checkpoint;
     this.course = course;
+    this.courseService = courseService;
+  }
+
+  @Override
+  protected void updateGui(Player player) {
+    setBorders();
+    setRemoveButton(player);
   }
 
   @Override
@@ -34,30 +44,29 @@ public class CourseDetailsGui extends Gui implements NavigableGui {
         .build());
   }
 
-  @Override
-  protected void updateGui(Player player) {
-    setBorders();
-    setCheckpointsButton(player, course);
-  }
-
-  private void setCheckpointsButton(final Player player, final Course course) {
+  private void setRemoveButton(final Player player) {
     final var guiItem = new GuiItemBuilder()
-            .material(Material.MAP)
-            .displayName(Translate.translate("gui.course.list.buttons.checkpoints", player))
-            .onClick((clicker, slot) -> {
-              final var gui = new CheckpointListGui(getCheckpointListTitle(clicker), course, courseService);
-              gui.open(clicker, this);
-            })
+            .material(Material.BARRIER)
+            .displayName(Translate.translate("gui.checkpoint.details.delete", player))
+            .onClick((clicker, clickType) -> confirmCheckpointDelete(clicker))
             .build();
     setItem(ROW_LENGTH + 2, guiItem);
   }
 
-  private String getCheckpointListTitle(final Player player) {
-    return Translate.translate(
-        "gui.checkpoint.list.title",
-        player,
-        "course_name",
-        course.getCourseName());
+  private void confirmCheckpointDelete(final Player player) {
+    final var confirmGui = new ConfirmGui(
+        Translate.translate("gui.confirmation.checkpoint.delete", player),
+        accepter -> {
+          removeCheckpointFromCourse();
+          openPreviousGui(accepter);
+        }
+    );
+    confirmGui.open(player, this);
+  }
+
+  private void removeCheckpointFromCourse() {
+    course.removeCheckpoint(checkpoint);
+    this.courseService.saveCourse(course);
   }
 
   private void setBorders() {

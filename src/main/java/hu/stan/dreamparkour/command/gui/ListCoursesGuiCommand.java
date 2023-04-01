@@ -5,6 +5,7 @@ import hu.stan.dreamparkour.common.gui.CourseListGui;
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.annotation.command.Command;
 import hu.stan.dreamplugin.core.command.DreamCommandExecutor;
+import hu.stan.dreamplugin.core.translation.Translate;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -21,7 +22,9 @@ public class ListCoursesGuiCommand implements DreamCommandExecutor {
 
   @Override
   public void onCommand(final Player sender, final String[] args) {
-    final var gui = new CourseListGui(courseService.findAll(), courseService);
+    final var gui = new CourseListGui(
+        Translate.translate("gui.course.list.title", sender),
+        courseService);
     gui.open(sender);
   }
 }

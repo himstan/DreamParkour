@@ -1,3 +1,21 @@
+gui:
+  course:
+    list:
+      title: "Courses"
+      buttons:
+        checkpoints: "Checkpoints"
+    details:
+      title: "%course_name%´s details"
+  checkpoint:
+    list:
+      title: "%course_name%´s checkpoints"
+      name: "%checkpoint_index%. checkpoint"
+    details:
+      title: "Checkpoint details"
+      delete: "Delete checkpoint"
+  confirmation:
+    checkpoint:
+      delete: "Are you sure you want to delete?"
 commands:
   dreamparkour:
     reload:

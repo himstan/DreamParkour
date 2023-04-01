@@ -1,6 +1,8 @@
 package hu.stan.dreamparkour.repository.impl;
 
+import hu.stan.dreamparkour.event.checkpoint.RemoveCheckpointEvent;
 import hu.stan.dreamparkour.mapper.CourseMapper;
+import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.entity.DbCourse;
 import hu.stan.dreamparkour.repository.CourseRepository;
@@ -11,8 +13,10 @@ import org.bukkit.Bukkit;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class JpaCourseRepository implements CourseRepository {
 
@@ -26,6 +30,11 @@ public class JpaCourseRepository implements CourseRepository {
 
   @Override
   public void saveCourse(final Course course) {
+    saveCourse(course, null);
+  }
+
+  @Override
+  public void saveCourse(final Course course, Consumer<DbCourse> callback) {
     Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
       final var dbCourse = courseMapper.toDbCourse(course);
       final var session = sessionFactory.openSession();
@@ -33,11 +42,19 @@ public class JpaCourseRepository implements CourseRepository {
       session.merge(dbCourse);
       session.getTransaction().commit();
       session.close();
+      if (Objects.nonNull(callback)) {
+        Bukkit.getScheduler().runTask(DreamPlugin.getInstance(), () -> callback.accept(dbCourse));
+      }
     });
   }
 
   @Override
   public void removeCourse(final Course course) {
+    removeCourse(course, null);
+  }
+
+  @Override
+  public void removeCourse(final Course course, Consumer<DbCourse> callback) {
     Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
       final var dbCourse = courseMapper.toDbCourse(course);
       final var session = sessionFactory.openSession();
@@ -45,6 +62,9 @@ public class JpaCourseRepository implements CourseRepository {
       session.remove(dbCourse);
       session.getTransaction().commit();
       session.close();
+      if (Objects.nonNull(callback)) {
+        Bukkit.getScheduler().runTask(DreamPlugin.getInstance(), () -> callback.accept(dbCourse));
+      }
     });
   }
 
@@ -75,5 +95,13 @@ public class JpaCourseRepository implements CourseRepository {
 
   private Optional<Course> mapToOptionalCourse(final DbCourse dbCourse) {
     return Optional.ofNullable(dbCourse).map(courseMapper::toCourse);
+  }
+
+  private void handleCheckpointRemoval(final Course course) {
+    final var deletedCheckpoints = course.getCheckpointsWithDeleted().stream()
+        .filter(Checkpoint::isDeleted)
+        .peek(checkpoint -> Bukkit.getPluginManager().callEvent(new RemoveCheckpointEvent(checkpoint)))
+        .toList();
+    course.getCheckpointsWithDeleted().removeAll(deletedCheckpoints);
   }
 }

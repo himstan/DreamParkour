@@ -1,5 +1,6 @@
-package hu.stan.dreamparkour.event;
+package hu.stan.dreamparkour.event.checkpoint;
 
+import hu.stan.dreamparkour.event.DreamEvent;
 import hu.stan.dreamparkour.model.course.CourseRun;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,20 +10,8 @@ import org.bukkit.event.HandlerList;
 
 @Getter
 @RequiredArgsConstructor
-public class PlayerHitCheckpoint extends Event {
-
-  private static final HandlerList HANDLERS_LIST = new HandlerList();
+public class PlayerHitCheckpoint extends DreamEvent {
 
   private final Player player;
   private final CourseRun courseRun;
-
-
-  @Override
-  public HandlerList getHandlers() {
-    return HANDLERS_LIST;
-  }
-
-  public static HandlerList getHandlerList() {
-    return HANDLERS_LIST;
-  }
 }

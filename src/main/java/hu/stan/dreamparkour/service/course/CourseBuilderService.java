@@ -21,20 +21,12 @@ public class CourseBuilderService {
   private final CourseBuilderCache courseBuilderCache;
   private final CheckpointBuilderCache checkpointBuilderCache;
 
-  public boolean isPlayerBuildingCheckpoint(final Player player) {
-    return checkpointBuilderCache.exists(player.getUniqueId());
-  }
-
   public boolean isPlayerCourseBuilder(final Player player) {
     return courseBuilderCache.exists(player.getUniqueId());
   }
 
   public void setPlayerAsCourseBuilder(final Player player, final Course course) {
     courseBuilderCache.add(player.getUniqueId(), course.getCourseId());
-  }
-
-  public void removePlayerFromCourseBuilder(final Player player) {
-    courseBuilderCache.remove(player.getUniqueId());
   }
 
   public void setStartLocation(final Player player, final Location location) {
@@ -75,6 +67,7 @@ public class CourseBuilderService {
           course -> {
             handleFlatCheckpoint(checkpoint);
             roundCheckpointLocations(checkpoint);
+            checkpoint.setCourse(course);
             course.addCheckpoint(checkpoint);
             courseService.saveCourse(course);
             removeCheckpointFromBuilder(player);

@@ -31,6 +31,6 @@ public class CheckpointMapper {
         locationMapper.toLocation(dbCheckpoint.getStartingLocation()),
         locationMapper.toLocation(dbCheckpoint.getEndingLocation()),
         dbCheckpoint.getCreatedAt(),
-        dbCheckpoint.getDeleted());
+        dbCheckpoint.isDeleted());
   }
 }

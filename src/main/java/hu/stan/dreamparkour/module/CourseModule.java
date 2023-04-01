@@ -5,7 +5,7 @@ import static hu.stan.dreamparkour.common.constant.PluginConstants.TIME_FORMAT;
 import static hu.stan.dreamparkour.util.CourseRunUtils.calculateRunTime;
 
 import hu.stan.dreamparkour.common.helper.CourseHelper;
-import hu.stan.dreamparkour.event.PlayerHitCheckpoint;
+import hu.stan.dreamparkour.event.checkpoint.PlayerHitCheckpoint;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.course.Course;

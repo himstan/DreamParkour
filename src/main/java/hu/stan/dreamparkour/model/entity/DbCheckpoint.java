@@ -31,8 +31,8 @@ public class DbCheckpoint {
   @JoinColumn(name = "end_location_id", referencedColumnName = "location_id")
   private DbLocation endingLocation;
 
-  @Column
-  private Boolean deleted = false;
+  @Column(name = "deleted")
+  private boolean deleted;
 
   @ManyToOne
   @JoinColumn(name = "course_id", referencedColumnName = "course_id")

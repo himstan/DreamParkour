@@ -1,10 +1,13 @@
 package hu.stan.dreamparkour.model.course;
 
+import hu.stan.dreamparkour.event.checkpoint.CreateCheckpointEvent;
+import hu.stan.dreamparkour.event.checkpoint.RemoveCheckpointEvent;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamplugin.exception.DreamPluginException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +45,19 @@ public class Course {
         .toList();
   }
 
+  public List<Checkpoint> getCheckpointsWithDeleted() {
+    return this.checkpoints;
+  }
+
   public void addCheckpoint(final Checkpoint checkpoint) {
     checkpoints.add(checkpoint);
+    Bukkit.getPluginManager().callEvent(new CreateCheckpointEvent(checkpoint));
   }
 
   public void removeCheckpoint(final Checkpoint checkpoint) {
     if (checkpoints.contains(checkpoint)) {
       checkpoint.setDeleted(true);
+      Bukkit.getPluginManager().callEvent(new RemoveCheckpointEvent(checkpoint));
     } else {
       throw new DreamPluginException(String.format("Checkpoint: [%s] is not part of course: [%s]", checkpoint.getCheckpointId(), courseId));
     }
@@ -58,6 +67,6 @@ public class Course {
     final var checkpoints = getCheckpoints();
     final var checkpointSize = checkpoints.size();
     final var checkpoint = checkpoints.get(checkpointSize - 1);
-    checkpoint.setDeleted(true);
+    removeCheckpoint(checkpoint);
   }
 }
