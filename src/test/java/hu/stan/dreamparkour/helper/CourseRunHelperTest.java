@@ -6,6 +6,7 @@ import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.checkpoint.CheckpointLocation;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
+import hu.stan.dreamparkour.service.runtime.BestTimeService;
 import hu.stan.dreamparkour.util.CourseRunUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -28,6 +29,9 @@ public class CourseRunHelperTest extends BaseUnitTest {
 
   @Mock
   private CourseService courseService;
+
+  @Mock
+  private BestTimeService bestTimeService;
 
   @InjectMocks
   private CourseRunHelper courseRunHelper;

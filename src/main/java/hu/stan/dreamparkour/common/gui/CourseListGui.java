@@ -5,6 +5,7 @@ import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
 import hu.stan.dreamplugin.core.gui.model.GuiItem;
 import hu.stan.dreamplugin.core.gui.model.ListGui;
+import hu.stan.dreamplugin.core.service.TextInputService;
 import hu.stan.dreamplugin.core.translation.Translate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,10 +16,11 @@ import java.util.List;
 public class CourseListGui extends ListGui {
 
   private final CourseService courseService;
+  private final TextInputService textInputService;
 
-  public CourseListGui(final String title, final CourseService courseService) {
-    super(title);
+  public CourseListGui(final CourseService courseService, TextInputService textInputService) {
     this.courseService = courseService;
+    this.textInputService = textInputService;
   }
 
   @Override
@@ -39,11 +41,11 @@ public class CourseListGui extends ListGui {
         .displayName(course.getCourseName())
         .material(Material.OAK_LOG)
         .onClick((player, slot) -> {
-          final var detailsGui = new CourseDetailsGui(
-              Translate.translate("gui.course.details.title", player, "course_name", course.getCourseName()),
-              course, courseService);
+          final var detailsGui = new CourseDetailsGui(textInputService, course, courseService);
           player.closeInventory();
-          detailsGui.open(player, this);
+          detailsGui
+              .withTitle(Translate.translate("gui.course.details.title", player, "course_name", course.getCourseName()))
+              .open(player, this);
         })
         .build();
   }

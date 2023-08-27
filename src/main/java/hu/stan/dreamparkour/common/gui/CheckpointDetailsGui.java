@@ -20,8 +20,8 @@ public class CheckpointDetailsGui extends Gui implements NavigableGui {
   private final Checkpoint checkpoint;
   private final Course course;
 
-  public CheckpointDetailsGui(final String title, final Course course, final Checkpoint checkpoint, final CourseService courseService) {
-    super(title, 3);
+  public CheckpointDetailsGui(final Course course, final Checkpoint checkpoint, final CourseService courseService) {
+    super(3);
     this.checkpoint = checkpoint;
     this.course = course;
     this.courseService = courseService;
@@ -55,13 +55,14 @@ public class CheckpointDetailsGui extends Gui implements NavigableGui {
 
   private void confirmCheckpointDelete(final Player player) {
     final var confirmGui = new ConfirmGui(
-        Translate.translate("gui.confirmation.checkpoint.delete", player),
         accepter -> {
           removeCheckpointFromCourse();
           openPreviousGui(accepter);
         }
     );
-    confirmGui.open(player, this);
+    confirmGui
+        .withTitle(Translate.translate("gui.confirmation.checkpoint.delete", player))
+        .open(player, this);
   }
 
   private void removeCheckpointFromCourse() {

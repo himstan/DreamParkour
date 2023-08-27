@@ -23,8 +23,7 @@ public class CheckpointListGui extends ListGui {
   private final Course course;
   private final CourseService courseService;
 
-  public CheckpointListGui(String title, final Course course, final CourseService courseService) {
-    super(title);
+  public CheckpointListGui(final Course course, final CourseService courseService) {
     this.courseService = courseService;
     this.course = course;
   }
@@ -64,11 +63,12 @@ public class CheckpointListGui extends ListGui {
 
   private void openCheckpointDetails(final Player player, final Checkpoint checkpoint) {
     final var detailsGui = new CheckpointDetailsGui(
-        Translate.translate("gui.checkpoint.details.title", player),
         course,
         checkpoint,
         courseService);
-    detailsGui.open(player, this);
+    detailsGui
+        .withTitle(Translate.translate("gui.checkpoint.details.title", player))
+        .open(player, this);
   }
 
 

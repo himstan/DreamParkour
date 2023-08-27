@@ -6,6 +6,7 @@ import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
 import hu.stan.dreamplugin.core.gui.model.Gui;
 import hu.stan.dreamplugin.core.gui.model.GuiItem;
 import hu.stan.dreamplugin.core.gui.model.NavigableGui;
+import hu.stan.dreamplugin.core.service.TextInputService;
 import hu.stan.dreamplugin.core.translation.Translate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,11 +15,13 @@ import static hu.stan.dreamplugin.core.gui.util.GuiConstants.ROW_LENGTH;
 
 public class CourseDetailsGui extends Gui implements NavigableGui {
 
+  private final TextInputService textInputService;
   private final CourseService courseService;
   private final Course course;
 
-  public CourseDetailsGui(final String title, final Course course, final CourseService courseService) {
-    super(title, 3);
+  public CourseDetailsGui(TextInputService textInputService, final Course course, final CourseService courseService) {
+    super(3);
+    this.textInputService = textInputService;
     this.courseService = courseService;
     this.course = course;
   }
@@ -38,6 +41,22 @@ public class CourseDetailsGui extends Gui implements NavigableGui {
   protected void updateGui(Player player) {
     setBorders();
     setCheckpointsButton(player, course);
+    setRenameButton(player, course);
+  }
+
+  private void setRenameButton(final Player player, final Course course) {
+    final var guiItem = new GuiItemBuilder()
+        .material(Material.BOOK)
+        .displayName(Translate.translate("gui.course.list.buttons.rename", player))
+        .onClick((clicker, slot) -> {
+          clicker.closeInventory();
+          textInputService.getInputFrom(player, "Enter the new course name", newName -> {
+            course.setCourseName(newName);
+            courseService.saveCourse(course);
+            this.openPreviousGui(player);
+          });
+        }).build();
+    setItem(ROW_LENGTH + 3, guiItem);
   }
 
   private void setCheckpointsButton(final Player player, final Course course) {
@@ -45,8 +64,9 @@ public class CourseDetailsGui extends Gui implements NavigableGui {
             .material(Material.MAP)
             .displayName(Translate.translate("gui.course.list.buttons.checkpoints", player))
             .onClick((clicker, slot) -> {
-              final var gui = new CheckpointListGui(getCheckpointListTitle(clicker), course, courseService);
-              gui.open(clicker, this);
+              new CheckpointListGui(course, courseService)
+                  .withTitle(getCheckpointListTitle(clicker))
+                  .open(clicker, this);
             })
             .build();
     setItem(ROW_LENGTH + 2, guiItem);
