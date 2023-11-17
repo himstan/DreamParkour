@@ -3,7 +3,8 @@ gui:
     list:
       title: "Courses"
       buttons:
-        checkpoints: "Checkpoints"
+        checkpoints: "List checkpoints"
+        rename: "Rename course"
     details:
       title: "%course_name%´s details"
   checkpoint:
