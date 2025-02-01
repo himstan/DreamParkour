@@ -10,8 +10,8 @@ import hu.stan.dreamparkour.model.entity.DbSplitRunTime;
 import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.util.HibernateUtils;
-import hu.stan.dreamplugin.core.configuration.registry.ConfigurationRegistrar;
-import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import hu.stan.dreamweaver.core.configuration.registry.ConfigurationRegistrar;
+import hu.stan.dreamweaver.core.dependency.injector.DependencyInjector;
 import org.bukkit.entity.Player;
 import org.hibernate.SessionFactory;
 

@@ -3,8 +3,8 @@ package hu.stan.dreamparkour.model.course;
 import hu.stan.dreamparkour.event.checkpoint.CreateCheckpointEvent;
 import hu.stan.dreamparkour.event.checkpoint.RemoveCheckpointEvent;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.exception.DreamPluginException;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.exception.DreamWeaverException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,15 +51,15 @@ public class Course {
 
   public void addCheckpoint(final Checkpoint checkpoint) {
     checkpoints.add(checkpoint);
-    DreamPlugin.getInstance().getServer().getPluginManager().callEvent(new CreateCheckpointEvent(checkpoint));
+    DreamWeaver.getInstance().getServer().getPluginManager().callEvent(new CreateCheckpointEvent(checkpoint));
   }
 
   public void removeCheckpoint(final Checkpoint checkpoint) {
     if (checkpoints.contains(checkpoint)) {
       checkpoint.setDeleted(true);
-      DreamPlugin.getInstance().getServer().getPluginManager().callEvent(new RemoveCheckpointEvent(checkpoint));
+      DreamWeaver.getInstance().getServer().getPluginManager().callEvent(new RemoveCheckpointEvent(checkpoint));
     } else {
-      throw new DreamPluginException(String.format("Checkpoint: [%s] is not part of course: [%s]", checkpoint.getCheckpointId(), courseId));
+      throw new DreamWeaverException(String.format("Checkpoint: [%s] is not part of course: [%s]", checkpoint.getCheckpointId(), courseId));
     }
   }
 

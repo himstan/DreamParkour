@@ -7,7 +7,7 @@ import hu.stan.dreamparkour.exception.RunTimeNotStartedException;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.course.CourseRun;
 import hu.stan.dreamparkour.util.CourseRunUtils;
-import hu.stan.dreamplugin.annotation.core.Service;
+import hu.stan.dreamweaver.annotation.core.Service;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

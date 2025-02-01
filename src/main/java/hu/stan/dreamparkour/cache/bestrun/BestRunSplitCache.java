@@ -3,7 +3,7 @@ package hu.stan.dreamparkour.cache.bestrun;
 import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.util.CourseRunUtils;
-import hu.stan.dreamplugin.core.cache.BaseCache;
+import hu.stan.dreamweaver.core.cache.BaseCache;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 

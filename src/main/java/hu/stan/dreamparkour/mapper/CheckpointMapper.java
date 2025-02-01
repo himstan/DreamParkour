@@ -2,7 +2,7 @@ package hu.stan.dreamparkour.mapper;
 
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.entity.DbCheckpoint;
-import hu.stan.dreamplugin.annotation.core.Component;
+import hu.stan.dreamweaver.annotation.core.Component;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;

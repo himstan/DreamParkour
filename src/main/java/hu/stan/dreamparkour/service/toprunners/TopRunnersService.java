@@ -8,9 +8,9 @@ import hu.stan.dreamparkour.model.runtime.PlayerRunTimePlaceholderData;
 import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.impl.JpaRunTimeRepository;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.annotation.core.Service;
-import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.annotation.core.Service;
+import hu.stan.dreamweaver.core.dependency.injector.DependencyInjector;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -96,6 +96,6 @@ public class TopRunnersService {
   }
 
   private void runAsync(final Runnable runnable) {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), runnable);
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(), runnable);
   }
 }

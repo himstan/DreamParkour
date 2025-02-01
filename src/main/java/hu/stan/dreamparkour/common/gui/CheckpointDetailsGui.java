@@ -3,16 +3,16 @@ package hu.stan.dreamparkour.common.gui;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
-import hu.stan.dreamplugin.core.gui.model.ConfirmGui;
-import hu.stan.dreamplugin.core.gui.model.Gui;
-import hu.stan.dreamplugin.core.gui.model.GuiItem;
-import hu.stan.dreamplugin.core.gui.model.NavigableGui;
-import hu.stan.dreamplugin.core.translation.Translate;
+import hu.stan.dreamweaver.core.gui.builder.GuiItemBuilder;
+import hu.stan.dreamweaver.core.gui.model.ConfirmGui;
+import hu.stan.dreamweaver.core.gui.model.Gui;
+import hu.stan.dreamweaver.core.gui.model.GuiItem;
+import hu.stan.dreamweaver.core.gui.model.NavigableGui;
+import hu.stan.dreamweaver.core.translation.Translate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import static hu.stan.dreamplugin.core.gui.util.GuiConstants.ROW_LENGTH;
+import static hu.stan.dreamweaver.core.gui.util.GuiConstants.ROW_LENGTH;
 
 public class CheckpointDetailsGui extends Gui implements NavigableGui {
 

@@ -3,7 +3,7 @@ package hu.stan.dreamparkour.mapper;
 import hu.stan.dreamparkour.model.TotalRunTime;
 import hu.stan.dreamparkour.model.entity.DbCourse;
 import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
-import hu.stan.dreamplugin.annotation.core.Component;
+import hu.stan.dreamweaver.annotation.core.Component;
 import java.util.UUID;
 
 @Component

@@ -6,8 +6,8 @@ import hu.stan.dreamparkour.cache.time.StartTimeCache;
 import hu.stan.dreamparkour.common.helper.ActionbarHelper;
 import hu.stan.dreamparkour.configuration.ParkourConfiguration;
 import hu.stan.dreamparkour.util.CourseRunUtils;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.annotation.core.Service;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.annotation.core.Service;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -46,7 +46,7 @@ public class RunTimeDisplayService {
 
   private void displaySplitTimeToPlayer(final UUID playerId) {
     if (startTimeCache.exists(playerId) && isOnline(playerId)) {
-      final var player = DreamPlugin.getInstance().getServer().getPlayer(playerId);
+      final var player = DreamWeaver.getInstance().getServer().getPlayer(playerId);
       final var currentTime = CourseRunUtils.calculateRunTime(startTimeCache.get(playerId), LocalTime.now());
       ActionbarHelper.sendToPlayer(player, currentTime.format(TIME_FORMAT));
     } else {
@@ -56,7 +56,7 @@ public class RunTimeDisplayService {
   }
 
   private void startDisplayTask() {
-    task = Bukkit.getScheduler().runTaskTimerAsynchronously(DreamPlugin.getInstance(),
+    task = Bukkit.getScheduler().runTaskTimerAsynchronously(DreamWeaver.getInstance(),
         () -> playersToDisplay.forEach(this::displaySplitTimeToPlayer),
         0,
         parkourConfiguration.actionBarTickSpeed);
@@ -74,6 +74,6 @@ public class RunTimeDisplayService {
   }
 
   private boolean isOnline(final UUID playerId) {
-    return Objects.nonNull(DreamPlugin.getInstance().getServer().getPlayer(playerId));
+    return Objects.nonNull(DreamWeaver.getInstance().getServer().getPlayer(playerId));
   }
 }

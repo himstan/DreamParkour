@@ -7,8 +7,8 @@ import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.entity.DbCourse;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.util.HibernateUtils;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.core.dependency.injector.DependencyInjector;
 import org.bukkit.Bukkit;
 import org.hibernate.SessionFactory;
 
@@ -35,7 +35,7 @@ public class JpaCourseRepository implements CourseRepository {
 
   @Override
   public void saveCourse(final Course course, Consumer<DbCourse> callback) {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(), () -> {
       final var dbCourse = courseMapper.toDbCourse(course);
       final var session = sessionFactory.openSession();
       session.beginTransaction();
@@ -43,7 +43,7 @@ public class JpaCourseRepository implements CourseRepository {
       session.getTransaction().commit();
       session.close();
       if (Objects.nonNull(callback)) {
-        Bukkit.getScheduler().runTask(DreamPlugin.getInstance(), () -> callback.accept(dbCourse));
+        Bukkit.getScheduler().runTask(DreamWeaver.getInstance(), () -> callback.accept(dbCourse));
       }
     });
   }
@@ -55,7 +55,7 @@ public class JpaCourseRepository implements CourseRepository {
 
   @Override
   public void removeCourse(final Course course, Consumer<DbCourse> callback) {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(), () -> {
       final var dbCourse = courseMapper.toDbCourse(course);
       final var session = sessionFactory.openSession();
       session.beginTransaction();
@@ -63,7 +63,7 @@ public class JpaCourseRepository implements CourseRepository {
       session.getTransaction().commit();
       session.close();
       if (Objects.nonNull(callback)) {
-        Bukkit.getScheduler().runTask(DreamPlugin.getInstance(), () -> callback.accept(dbCourse));
+        Bukkit.getScheduler().runTask(DreamWeaver.getInstance(), () -> callback.accept(dbCourse));
       }
     });
   }

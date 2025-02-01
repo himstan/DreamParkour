@@ -2,11 +2,11 @@ package hu.stan.dreamparkour.common.gui;
 
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
-import hu.stan.dreamplugin.core.gui.model.GuiItem;
-import hu.stan.dreamplugin.core.gui.model.ListGui;
-import hu.stan.dreamplugin.core.service.TextInputService;
-import hu.stan.dreamplugin.core.translation.Translate;
+import hu.stan.dreamweaver.core.gui.builder.GuiItemBuilder;
+import hu.stan.dreamweaver.core.gui.model.GuiItem;
+import hu.stan.dreamweaver.core.gui.model.ListGui;
+import hu.stan.dreamweaver.core.service.TextInputService;
+import hu.stan.dreamweaver.core.translation.Translate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

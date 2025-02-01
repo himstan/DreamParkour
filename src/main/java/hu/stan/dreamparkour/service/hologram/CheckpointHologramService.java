@@ -4,7 +4,7 @@ import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.hologram.Hologram;
 import hu.stan.dreamparkour.util.LocationUtils;
-import hu.stan.dreamplugin.annotation.core.Service;
+import hu.stan.dreamweaver.annotation.core.Service;
 
 import java.util.List;
 

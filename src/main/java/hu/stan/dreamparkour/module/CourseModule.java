@@ -14,7 +14,7 @@ import hu.stan.dreamparkour.service.course.CourseRunService;
 import hu.stan.dreamparkour.service.runtime.BestTimeService;
 import hu.stan.dreamparkour.service.runtime.RunTimeDisplayService;
 import hu.stan.dreamparkour.service.runtime.RunTimeService;
-import hu.stan.dreamplugin.annotation.core.Module;
+import hu.stan.dreamweaver.annotation.core.Module;
 import java.time.LocalTime;
 import java.util.Objects;
 import javax.annotation.Nullable;

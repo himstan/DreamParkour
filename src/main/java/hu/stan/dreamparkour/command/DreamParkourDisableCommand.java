@@ -3,12 +3,12 @@ package hu.stan.dreamparkour.command;
 import hu.stan.dreamparkour.exception.CourseNotFoundException;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.annotation.command.Command;
-import hu.stan.dreamplugin.annotation.command.ErrorHandler;
-import hu.stan.dreamplugin.common.helper.StringHelper;
-import hu.stan.dreamplugin.core.command.DreamCommandExecutor;
-import hu.stan.dreamplugin.core.command.DreamTabCompleter;
-import hu.stan.dreamplugin.core.translation.Translate;
+import hu.stan.dreamweaver.annotation.command.Command;
+import hu.stan.dreamweaver.annotation.command.ErrorHandler;
+import hu.stan.dreamweaver.common.helper.StringHelper;
+import hu.stan.dreamweaver.core.command.DreamCommandExecutor;
+import hu.stan.dreamweaver.core.command.DreamTabCompleter;
+import hu.stan.dreamweaver.core.translation.Translate;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 

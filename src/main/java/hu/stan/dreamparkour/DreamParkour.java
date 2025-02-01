@@ -2,12 +2,12 @@ package hu.stan.dreamparkour;
 
 import hu.stan.dreamparkour.repository.util.HibernateUtils;
 import hu.stan.dreamparkour.service.toprunners.TopRunnersService;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.annotation.core.Plugin;
-import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.annotation.core.Plugin;
+import hu.stan.dreamweaver.core.dependency.injector.DependencyInjector;
 
 @Plugin
-public final class DreamParkour extends DreamPlugin {
+public final class DreamParkour extends DreamWeaver {
 
   @Override
   public void onPluginEnable() {

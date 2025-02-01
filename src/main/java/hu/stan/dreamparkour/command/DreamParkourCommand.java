@@ -1,7 +1,7 @@
 package hu.stan.dreamparkour.command;
 
-import hu.stan.dreamplugin.annotation.command.Command;
-import hu.stan.dreamplugin.core.command.DreamCommand;
+import hu.stan.dreamweaver.annotation.command.Command;
+import hu.stan.dreamweaver.core.command.DreamCommand;
 
 @Command(
     name = "dreamparkour",

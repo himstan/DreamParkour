@@ -12,10 +12,10 @@ import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.repository.CourseRepository;
 import hu.stan.dreamparkour.repository.impl.JpaCourseRepository;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.annotation.core.Service;
-import hu.stan.dreamplugin.core.dependency.injector.DependencyInjector;
-import hu.stan.dreamplugin.core.dependency.lifecycle.OnEnable;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.annotation.core.Service;
+import hu.stan.dreamweaver.core.dependency.injector.DependencyInjector;
+import hu.stan.dreamweaver.core.dependency.lifecycle.OnEnable;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 
@@ -153,6 +153,6 @@ public class CourseService implements OnEnable {
   }
 
   private void callEvent(final DreamEvent dreamEvent) {
-    DreamPlugin.getInstance().getServer().getPluginManager().callEvent(dreamEvent);
+    DreamWeaver.getInstance().getServer().getPluginManager().callEvent(dreamEvent);
   }
 }

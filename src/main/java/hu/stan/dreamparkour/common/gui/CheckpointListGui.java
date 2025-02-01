@@ -3,11 +3,11 @@ package hu.stan.dreamparkour.common.gui;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.core.gui.builder.GuiItemBuilder;
-import hu.stan.dreamplugin.core.gui.model.GuiItem;
-import hu.stan.dreamplugin.core.gui.model.ListGui;
-import hu.stan.dreamplugin.core.translation.Translate;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.core.gui.builder.GuiItemBuilder;
+import hu.stan.dreamweaver.core.gui.model.GuiItem;
+import hu.stan.dreamweaver.core.gui.model.ListGui;
+import hu.stan.dreamweaver.core.translation.Translate;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -81,7 +81,7 @@ public class CheckpointListGui extends ListGui {
 
   private void showCheckpoint(final Player player, final Checkpoint checkpoint) {
     final var scheduler = Bukkit.getScheduler();
-    final var plugin = DreamPlugin.getInstance();
+    final var plugin = DreamWeaver.getInstance();
     final var task = scheduler.runTaskTimerAsynchronously(plugin, () ->
         spawnFireParticlesOnBorder(player, checkpoint), 5, 10);
     scheduler.runTaskLaterAsynchronously(plugin, task::cancel, 205);

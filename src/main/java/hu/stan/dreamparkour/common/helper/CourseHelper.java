@@ -3,7 +3,7 @@ package hu.stan.dreamparkour.common.helper;
 import hu.stan.dreamparkour.model.checkpoint.Checkpoint;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.annotation.core.Component;
+import hu.stan.dreamweaver.annotation.core.Component;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;

@@ -1,10 +1,10 @@
 package hu.stan.dreamparkour.exception;
 
-import hu.stan.dreamplugin.exception.DreamPluginException;
+import hu.stan.dreamweaver.exception.DreamWeaverException;
 import lombok.Getter;
 
 @Getter
-public class CourseAlreadyExistsException extends DreamPluginException {
+public class CourseAlreadyExistsException extends DreamWeaverException {
 
   private final String courseName;
 

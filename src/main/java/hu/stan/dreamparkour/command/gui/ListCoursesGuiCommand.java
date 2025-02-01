@@ -3,10 +3,10 @@ package hu.stan.dreamparkour.command.gui;
 import hu.stan.dreamparkour.command.DreamParkourCommand;
 import hu.stan.dreamparkour.common.gui.CourseListGui;
 import hu.stan.dreamparkour.service.course.CourseService;
-import hu.stan.dreamplugin.annotation.command.Command;
-import hu.stan.dreamplugin.core.command.DreamCommandExecutor;
-import hu.stan.dreamplugin.core.service.TextInputService;
-import hu.stan.dreamplugin.core.translation.Translate;
+import hu.stan.dreamweaver.annotation.command.Command;
+import hu.stan.dreamweaver.core.command.DreamCommandExecutor;
+import hu.stan.dreamweaver.core.service.TextInputService;
+import hu.stan.dreamweaver.core.translation.Translate;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 

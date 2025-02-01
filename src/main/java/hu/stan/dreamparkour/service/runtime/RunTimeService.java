@@ -8,8 +8,8 @@ import hu.stan.dreamparkour.repository.RunTimeRepository;
 import hu.stan.dreamparkour.repository.impl.JpaRunTimeRepository;
 import hu.stan.dreamparkour.service.course.CourseService;
 import hu.stan.dreamparkour.service.toprunners.TopRunnersService;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.annotation.core.Service;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.annotation.core.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public class RunTimeService {
   }
 
   public void initBestTimeForPlayer(final Player player) {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(),
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(),
         () -> courseService.findAll().forEach(course -> {
           final var bestSplitTime = runTimeRepository.getBestSplitTimesForCourseAndPlayer(course, player);
           if (Objects.nonNull(bestSplitTime)) {
@@ -68,7 +68,7 @@ public class RunTimeService {
   }
 
   public void clearBestTimeCacheForPlayer(final Player player) {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(),
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(),
         () -> clearBestTimeCacheForPlayer(player));
   }
 
@@ -77,7 +77,7 @@ public class RunTimeService {
       final LocalTime runTime,
       final Course course,
       final CheckpointNode currentRun) {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(), () -> {
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(), () -> {
       final var totalRunTime = buildTotalRunTime(player, course, runTime);
       runTimeRepository.save(totalRunTime);
       runTimeRepository.save(currentRun, totalRunTime);
@@ -90,7 +90,7 @@ public class RunTimeService {
   }
 
   private void initBestTimes() {
-    Bukkit.getScheduler().runTaskAsynchronously(DreamPlugin.getInstance(),
+    Bukkit.getScheduler().runTaskAsynchronously(DreamWeaver.getInstance(),
         () -> courseService.findAll().forEach(course -> {
           initBestTimesForCourse(course);
           initBestSplitTimesForOnlinePlayers(course);

@@ -2,9 +2,9 @@ package hu.stan.dreamparkour.service.hologram;
 
 import hu.stan.dreamparkour.model.hologram.Hologram;
 import hu.stan.dreamparkour.model.hologram.HologramReference;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.core.cache.BaseCache;
-import hu.stan.dreamplugin.exception.DreamPluginException;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.core.cache.BaseCache;
+import hu.stan.dreamweaver.exception.DreamWeaverException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,7 +23,7 @@ public abstract class HologramService<T extends HologramReference> {
 
   private static final String METADATA_KEY = "dream_holo";
   private static final FixedMetadataValue METADATA_VALUE =
-      new FixedMetadataValue(DreamPlugin.getInstance(), true);
+      new FixedMetadataValue(DreamWeaver.getInstance(), true);
 
   public void createHologram(final T hologramRef, final Hologram hologram) {
     List<ArmorStand> armorStands = new ArrayList<>();
@@ -55,7 +55,7 @@ public abstract class HologramService<T extends HologramReference> {
 
   private ArmorStand spawnArmorStand(final Location location, final String line) {
     if (Objects.isNull(location) || Objects.isNull(location.getWorld())) {
-      throw new DreamPluginException("The world you are trying to spawn the hologram in doesn't exist!");
+      throw new DreamWeaverException("The world you are trying to spawn the hologram in doesn't exist!");
     }
     final var armorStand =
         (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);

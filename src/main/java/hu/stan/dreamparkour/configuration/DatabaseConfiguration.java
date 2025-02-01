@@ -1,7 +1,7 @@
 package hu.stan.dreamparkour.configuration;
 
-import hu.stan.dreamplugin.annotation.configuration.Configuration;
-import hu.stan.dreamplugin.annotation.configuration.ConfigurationField;
+import hu.stan.dreamweaver.annotation.configuration.Configuration;
+import hu.stan.dreamweaver.annotation.configuration.ConfigurationField;
 
 @Configuration(configFileName = "mysql-config")
 public class DatabaseConfiguration {

@@ -2,9 +2,9 @@ package hu.stan.dreamparkour.repository.util;
 
 import hu.stan.dreamparkour.configuration.DatabaseConfiguration;
 import hu.stan.dreamparkour.model.entity.*;
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.core.configuration.registry.ConfigurationRegistrar;
-import hu.stan.dreamplugin.exception.DreamPluginException;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.core.configuration.registry.ConfigurationRegistrar;
+import hu.stan.dreamweaver.exception.DreamWeaverException;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.hibernate.SessionFactory;
@@ -44,13 +44,13 @@ public final class HibernateUtils {
 
   private void setupFlyway(final SessionConfigFactory sessionConfigFactory) {
     try {
-      final var fluentConfiguration = new FluentConfiguration(DreamPlugin.class.getClassLoader())
+      final var fluentConfiguration = new FluentConfiguration(DreamWeaver.class.getClassLoader())
           .baselineOnMigrate(true)
           .dataSource(sessionConfigFactory.getUrl(), sessionConfigFactory.userName(), sessionConfigFactory.password());
       final var flyway = new Flyway(fluentConfiguration);
       flyway.migrate();
     } catch (final Exception e) {
-      throw new DreamPluginException("There was an error while running flyway updates.", e);
+      throw new DreamWeaverException("There was an error while running flyway updates.", e);
     }
   }
 

@@ -4,7 +4,7 @@ import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.entity.DbSplitRunTime;
 import hu.stan.dreamparkour.model.entity.DbTotalRunTime;
 import hu.stan.dreamparkour.util.CourseRunUtils;
-import hu.stan.dreamplugin.annotation.core.Component;
+import hu.stan.dreamweaver.annotation.core.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

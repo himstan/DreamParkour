@@ -5,7 +5,7 @@ import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.course.Course;
 import hu.stan.dreamparkour.model.course.CourseRun;
 import hu.stan.dreamparkour.service.runtime.BestTimeService;
-import hu.stan.dreamplugin.annotation.core.Component;
+import hu.stan.dreamweaver.annotation.core.Component;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

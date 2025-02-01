@@ -1,7 +1,7 @@
 package hu.stan.dreamparkour.cache.bestrun;
 
 import hu.stan.dreamparkour.model.course.Course;
-import hu.stan.dreamplugin.core.cache.BaseCache;
+import hu.stan.dreamweaver.core.cache.BaseCache;
 import java.time.LocalTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;

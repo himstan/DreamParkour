@@ -1,6 +1,6 @@
 package hu.stan.dreamparkour;
 
-import hu.stan.dreamplugin.DreamPlugin;
+import hu.stan.dreamweaver.DreamWeaver;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +16,11 @@ public class BaseUnitTest {
 
   @BeforeEach
   public void setup() {
-    final var mockPlugin = mock(DreamPlugin.class);
+    final var mockPlugin = mock(DreamWeaver.class);
     final var mockServer = mock(Server.class);
     final var mockPluginManager = mock(PluginManager.class);
     lenient().when(mockServer.getPluginManager()).thenReturn(mockPluginManager);
     lenient().when(mockPlugin.getServer()).thenReturn(mockServer);
-    ReflectionTestUtils.setField(DreamPlugin.class, "instance", mockPlugin);
+    ReflectionTestUtils.setField(DreamWeaver.class, "instance", mockPlugin);
   }
 }

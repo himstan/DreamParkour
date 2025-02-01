@@ -2,7 +2,7 @@ package hu.stan.dreamparkour.service.scoreboard;
 
 import fr.mrmicky.fastboard.FastBoard;
 import hu.stan.dreamparkour.cache.scoreboard.ScoreboardCache;
-import hu.stan.dreamplugin.annotation.core.Service;
+import hu.stan.dreamweaver.annotation.core.Service;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 

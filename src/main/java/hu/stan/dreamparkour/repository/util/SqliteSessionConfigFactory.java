@@ -1,7 +1,7 @@
 package hu.stan.dreamparkour.repository.util;
 
-import hu.stan.dreamplugin.DreamPlugin;
-import hu.stan.dreamplugin.exception.DreamPluginException;
+import hu.stan.dreamweaver.DreamWeaver;
+import hu.stan.dreamweaver.exception.DreamWeaverException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.cfg.Configuration;
 
@@ -36,7 +36,7 @@ public class SqliteSessionConfigFactory implements SessionConfigFactory {
     public String getUrlWithCredentials() {
         setupDatabaseFile();
         return String.format("jdbc:sqlite:plugins/%s/database/database.db",
-            DreamPlugin.getInstance().getDataFolder().getName());
+            DreamWeaver.getInstance().getDataFolder().getName());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SqliteSessionConfigFactory implements SessionConfigFactory {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (final ClassNotFoundException e) {
-            throw new DreamPluginException("Couldn't find SQLite JDBC Driver.", e);
+            throw new DreamWeaverException("Couldn't find SQLite JDBC Driver.", e);
         }
     }
 
@@ -74,7 +74,7 @@ public class SqliteSessionConfigFactory implements SessionConfigFactory {
     }
 
     private void createDatabaseFolderIfDoesntExist() {
-        databaseFolder = new File(DreamPlugin.getInstance().getDataFolder(), "database");
+        databaseFolder = new File(DreamWeaver.getInstance().getDataFolder(), "database");
         if (!databaseFolder.exists()) {
             databaseFolder.mkdir();
         }
@@ -87,7 +87,7 @@ public class SqliteSessionConfigFactory implements SessionConfigFactory {
                 databaseFile.createNewFile();
             }
         } catch (final IOException e) {
-                throw new DreamPluginException("There was a problem creating the Sqlite database file", e);
+                throw new DreamWeaverException("There was a problem creating the Sqlite database file", e);
         }
     }
 }

@@ -7,7 +7,7 @@ import hu.stan.dreamparkour.event.checkpoint.RemoveCheckpointEvent;
 import hu.stan.dreamparkour.event.checkpoint.UpdateCheckpointEvent;
 import hu.stan.dreamparkour.event.course.InitializeCourseEvent;
 import hu.stan.dreamparkour.service.hologram.CheckpointHologramService;
-import hu.stan.dreamplugin.annotation.core.Module;
+import hu.stan.dreamweaver.annotation.core.Module;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

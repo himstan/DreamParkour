@@ -4,7 +4,7 @@ import hu.stan.dreamparkour.cache.bestrun.BestRunSplitCache;
 import hu.stan.dreamparkour.cache.bestrun.BestRunTotalTimeCache;
 import hu.stan.dreamparkour.model.checkpoint.CheckpointNode;
 import hu.stan.dreamparkour.model.course.Course;
-import hu.stan.dreamplugin.annotation.core.Service;
+import hu.stan.dreamweaver.annotation.core.Service;
 import java.time.LocalTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
